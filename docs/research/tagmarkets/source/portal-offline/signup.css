@@ -1,0 +1,112 @@
+.right_inner_addon {
+		position: relative;
+}
+
+.right_inner_addon input {
+  padding-right: 30px;
+}
+
+.right_inner_addon i {
+  position: absolute;
+  right: 0px;
+  padding: 10px 12px;
+  pointer-events: auto;
+}
+.fa-info-circle
+{
+	color:#be4b49;
+}
+.popover
+{
+	padding: 1px;
+		background-color: #be4b49;
+		border-radius: 5px;
+		box-shadow: 0 0 0 1px rgba(139, 3, 0, .75), 0 1px 10px rgba(0, 0, 0, .35);
+		border:0;
+}
+.popover-content {
+		color: white;
+		font-size: 13px; 
+}
+
+.popover.bottom .arrow:after
+{
+
+	border-bottom-color:#be4b49;
+	border-radius: 5px;
+	color: #be4b49;		
+}
+
+#bank_name_drop_label
+{
+	display: inline;
+}
+
+#bank_name_drop
+{
+	font-weight: normal;;
+}
+
+.digital_signature_container
+{
+	display: inline-block;
+}
+
+.external-registration-container a
+{
+	display: block;
+    padding: 10px;
+    text-align: center;
+    margin: 0 0px;
+    color: #000;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.external-registration-container .or
+{
+	display: block;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.external-registration-container a.fb_register
+{
+	background: url(/gateway/social/facebook/images/fb.png) no-repeat 20px center;
+}
+
+.external-registration-container a.google_register
+{
+	background: url(/gateway/social/google/images/google.png) no-repeat 20px center;
+}
+
+.external-registration-container .auth0-register {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;  /* Center the text */
+    width: 100%;  /* Make the button take the full width like the Google button */
+    background-color: #f5f5f5;
+    border: 1px solid #dcdcdc;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    color: #555;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;  /* Center text */
+    box-sizing: border-box;
+}
+
+.external-registration-container .auth0-register img {
+    width: 20px;
+    height: 20px;
+    margin-right: 20px;
+    position: absolute;  /* Position the icon absolutely */
+    left: 30px;  /* Align the icon to the left */
+}
+
+.external-registration-container .auth0-register:hover {
+    background-color: #ebebeb;
+}
+

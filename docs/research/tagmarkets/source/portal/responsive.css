@@ -1,0 +1,124 @@
+/* Extra small devices (phones, less than 768px) */
+/* No media query since this is the default in Bootstrap */
+.portlet-content {
+	min-height:130px;
+}
+
+.username.username-hide-on-mobile {display: none !important;}
+/* Small devices (tablets, 768px and up) */
+@media (min-width:  768px) { 
+	.current-val {display:inline;}
+	.btn-balance-responsive {display:inline !important;}
+	.column-responsive2		{display:table-cell !important;}
+	.column-responsive3		{display:table-cell !important;}
+
+	.margin-bottom-xs-10 { margin-bottom:0px; }
+	.margin-bottom-xs-15 { margin-bottom:0px; }
+	.margin-bottom-xs-20 { margin-bottom:0px; }
+
+	.margin-top-xs-10 { margin-top:0px; }
+	.margin-top-xs-15 { margin-top:0px; }
+	.margin-top-xs-20 { margin-top:0px; }
+
+	.margin-left-xs-10 { margin-left:0px; }
+	.margin-left-xs-15 { margin-left:0px; }
+	.margin-left-xs-20 { margin-left:0px; }
+
+	.margin-right-xs-10 { margin-right:0px; }
+	.margin-right-xs-15 { margin-right:0px; }
+	.margin-right-xs-20 { margin-right:0px; }
+
+	.padding-bottom-xs-10 { padding-bottom:0px; }
+	.padding-bottom-xs-15 { padding-bottom:0px; }
+	.padding-bottom-xs-20 { padding-bottom:0px; }
+
+	.padding-top-xs-10 { padding-top:0px; }
+	.padding-top-xs-15 { padding-top:0px; }
+	.padding-top-xs-20 { padding-top:0px; }
+
+	.padding-left-xs-10 { padding-left:0px; }
+	.padding-left-xs-15 { padding-left:0px; }
+	.padding-left-xs-20 { padding-left:0px; }
+
+	.padding-right-xs-10 { padding-right:0px; }
+	.padding-right-xs-15 { padding-right:0px; }
+	.padding-right-xs-20 { padding-right:0px; }
+
+	.text-center-xs { text-align: inherit;}
+	.balance-list 	{ padding-top:10px; }
+
+	.balance-box{ padding-top:0px;}
+	
+ }
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) { 
+	
+
+	.md-no-padding-right {
+		padding-right:0px;
+	}
+	.md-display {
+		display:none;
+	}
+	.balance-box{padding-top:0px;}
+	
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width:  1200px) { 
+	.btn-lg {padding:5.5px 20px;}
+	.btn-balance {min-width:120px;}
+	.column-responsive1		{display:none !important;}
+	.column-responsive2		{display:none !important;}
+	.column-responsive3		{display:none !important;}
+	.profile-sidebar 		{float: left;width: 300px; margin-right: 20px;}
+	.clock-responsive {display:block !important;}
+	.username.username-hide-on-mobile {display: inline-block !important;}
+ 	
+ }
+
+ /* Very Large devices (very large resolutions, 1450px and up) */
+@media (min-width:  1450px) { 
+	.btn-lg {padding:13px 30px 12px 30px}
+	.btn-balance {font-size:18px; min-width:160px;}
+	.clock-responsive-other {display:block !important;}	
+	.column-responsive1{display:table-cell !important;}
+	.portlet-content 		{min-height:130px;}
+	.username.username-hide-on-mobile {display: inline-block !important;}
+	
+ }
+
+/* Very Large devices (very large resolutions, 14600 and up) */
+@media (min-width:  1650px) { 
+	.btn-balance {font-size:20px; min-width:180px;}
+	/*.btn-lg {font-size:28px; padding:10px 50px; text-transform: capitalize;}*/
+	/*.clock-responsive-other3 {display:block !important; background:red;}	*/
+	.clock-responsive-other2 {display:block !important;}
+	.column-responsive2{display:table-cell !important;}
+	.username.username-hide-on-mobile {display: inline-block !important;}
+ }
+
+ /* Very Large devices (very large resolutions, 14600 and up) */
+@media (min-width:  1800px) { 
+	
+	/*.btn-lg {font-size:28px; padding:10px 50px; text-transform: capitalize;}*/
+	.clock-responsive-other3 {display:block !important;}	
+	.column-responsive3{display:table-cell !important;}
+	.username.username-hide-on-mobile {display: inline-block !important;}
+ }
+
+
+
+/* use these also in case the above are not enough */ 
+
+/*
+@media (max-width: @screen-xs-max) { ... }
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) { ... }
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) { ... }
+@media (min-width: @screen-lg-min) { ... }
+*/
+
+/* Paymetn methods slider fix for ltr*/
+.bx-wrapper .bx-viewport{ direction: ltr; }
+

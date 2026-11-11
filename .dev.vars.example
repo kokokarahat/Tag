@@ -1,0 +1,13 @@
+# Local secrets for `wrangler dev` / `opennextjs-cloudflare preview`.
+# Copy to `.dev.vars` (git-ignored) and fill in real values.
+
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+# Required in production: without it the /admin console rejects every login.
+ADMIN_PASSWORD=TagAdmin2026
+DEPOSIT_WALLET_BTC=
+DEPOSIT_WALLET_ETH=
+DEPOSIT_WALLET_USDT=
+DEPOSIT_WALLET_USDC=
+DEPOSIT_WALLET_BNB=
+DEPOSIT_WALLET_SOL=

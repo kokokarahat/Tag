@@ -1,0 +1,87 @@
+body.page-sidebar-fixed .page-sidebar.navbar-collapse {
+  position: fixed !important;
+  top: 70px !important;
+  bottom: 0 !important;
+  height: auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-top: 0 !important;
+}
+
+/* The live portal hides the "Become Money Manager" button in the trading accounts panel. */
+.btn-open-pamm-account {
+  display: none !important;
+}
+
+body.page-sidebar-fixed .page-sidebar .account-manager-buttons {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  padding-left: 0 !important;
+  padding-right: 20px !important;
+  width: 100% !important;
+}
+
+body.page-sidebar-fixed .page-sidebar .account-manager-buttons a {
+  float: none !important;
+  margin: 5px 0 0 0 !important;
+}
+
+/* Make WhatsApp (first button) stick left, FAQ/headset (second) stick right */
+body.page-sidebar-fixed .page-sidebar .account-manager-buttons a:first-child {
+  margin-left: 0 !important;
+  order: 1;
+}
+body.page-sidebar-fixed .page-sidebar .account-manager-buttons a:last-child {
+  order: 2;
+}
+
+.tm-deposit-modal {
+  overflow-y: auto;
+}
+
+.tm-deposit-modal .modal-dialog,
+.tm-deposit-modal .modal-dialog.margin-top-20 {
+  margin-top: 100px !important;
+  margin-bottom: 20px;
+}
+
+.tm-deposit-modal .modal-content {
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+.tm-deposit-modal .modal-header .btn-modal-close i {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* The empty From/To placeholder columns reserve 100px each; the selects are rendered above them, so collapse the placeholders. */
+#tabContentInternalTransfer .row.internal-transfers > .col-md-6:nth-child(-n + 2) {
+  min-height: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+/* Live shows the wallet's "My Wallet Information" block and the Amount field at full opacity. The reveal script does not run in the clone. */
+.from-details-container,
+.wallet-toggle {
+  opacity: 1 !important;
+}
+
+/* The live embed (provider ratings) renders without a border; the default iframe border is not wanted. */
+.responsive-iframe {
+  border: 0;
+}
+
+/* The live page moves the balance bar into the header with a script; the clone keeps a copy in the content, so hide that copy. */
+body.page-sidebar-fixed .page-content .page-bar.balance {
+  display: none !important;
+}
+
+/* The live theme sets the content area to fill the viewport: window height minus the 70px header and the 33px footer. */
+body.page-sidebar-fixed .page-content {
+  min-height: calc(100vh - 103px) !important;
+  margin-bottom: 20px !important;
+}

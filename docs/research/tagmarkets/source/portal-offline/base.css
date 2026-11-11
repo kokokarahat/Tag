@@ -1,0 +1,630 @@
+:root {
+  --clr-white: #ffffff;
+  --clr-bg: #f5f5f5;
+  --clr-stroke: #e5e5e5;
+  --clr-divider: #e9e9e9;
+  --clr-slate-gray: #737373;
+  --clr-stone-gray: #787878;
+  --clr-dove-gray: #878787;
+  --clr-charcoal-black: #292929;
+  --clr-gunmetal: #353535;
+  --clr-warning: #e6bc03;
+  --clr-success: #1d8608;
+  --clr-primary: #ff4912;
+  --clr-secondary: #cafd5d;
+  --clr-text: #171717;
+}
+
+body.page-header-fixed {
+  background-color: #efefef;
+  font-family: "Geist-Regular", Arial;
+  font-size: 15px;
+}
+
+.footer-link {color: #000 !important;}
+
+.page-sidebar-fixed:not(.page-footer-fixed) .page-footer {
+  background: transparent;
+  color: #0000;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "ClashDisplay-Medium", Arial;
+}
+
+h2 {
+  color: var(--clr-text);
+ font-size: 20px;
+font-style: normal;
+font-weight: 500;
+line-height: 120%; /* 24px */
+letter-spacing: 0.4px;
+
+}
+
+h3 {
+  color: var(--clr-text);
+ font-size: 18px;
+font-style: normal;
+font-weight: 500;
+line-height: 120%; /* 24px */
+letter-spacing: 0.4px;
+  
+}
+
+
+/* TO BE REVIEWED */
+h2.uppercase {
+  text-transform: none !important; /* TO BE REVIEWED */
+}
+
+.uppercase {
+  text-transform: none !important; /* TO BE REVIEWED */
+}
+/******************/
+
+.page-header.navbar {
+  background: var(--clr-text) !important;
+  height: 70px;
+}
+
+.page-header.navbar .page-logo .logo-default {
+  max-height: 26px !important;
+  height: 100% !important;
+  width: auto !important;
+}
+
+nav.navbar-default {
+  background: var(--clr-text);
+  height: 80px;
+}
+
+nav.navbar-default .navbar-brand {
+  margin: 22px 0 21px;
+}
+
+nav.navbar-default .navbar-brand > img {
+  height: 26px;
+}
+
+.clock.clock-responsive,
+.clock.clock-responsive-other,
+.clock.clock-responsive-other2,
+.clock.clock-responsive-other3,
+.dropdown-user {
+  display: none !important;
+}
+
+.page-header.navbar
+  .top-menu
+  .navbar-nav
+  > li.dropdown#header_inbox_bar
+  > .dropdown-toggle
+  > i {
+  color: var(--clr-bg) !important;
+}
+
+.page-header.navbar
+  .top-menu
+  .navbar-nav
+  > li.dropdown.open#header_inbox_bar
+  > .dropdown-toggle
+  > i,
+.page-header.navbar
+  .top-menu
+  .navbar-nav
+  > li.dropdown#header_inbox_bar
+  > .dropdown-toggle:hover
+  > i {
+  color: var(--clr-text) !important;
+}
+
+.dropdown-quick-sidebar-toggler > .dropdown-toggle > i {
+  color: var(--clr-bg) !important;
+  transform: rotate(180deg);
+}
+
+.dropdown-quick-sidebar-toggler:hover > .dropdown-toggle > i {
+  color: var(--clr-text) !important;
+}
+
+.dropdown-quick-sidebar-toggler > .dropdown-toggle > i:hover {
+  background: transparent !important;
+}
+
+.page-header.navbar .top-menu .navbar-nav > li.dropdown.lang-select img {
+  border: transparent;
+}
+
+.page-header.navbar .top-menu .navbar-nav > li.dropdown.lang-select i,
+.page-header.navbar .top-menu .navbar-nav > li.dropdown.lang-select span {
+  color: var(--clr-bg);
+}
+
+.page-header.navbar .top-menu .navbar-nav > li.dropdown.lang-select.open i,
+.page-header.navbar .top-menu .navbar-nav > li.dropdown.lang-select.open span {
+  color: var(--clr-text);
+}
+
+.menu-toggler.responsive-toggler {
+  color: var(--clr-bg) !important;
+}
+
+.menu-toggler.responsive-toggler > i {
+  display: none;
+}
+
+.page-content {
+  background: #efefef;
+}
+
+.page-content-wrapper .page-content {
+  padding-top: 5px !important;
+}
+
+.page-header .page-bar.balance {
+  background-color: var(--clr-text);
+  border: none;
+}
+
+.page-header .page-bar.balance .balance-box .balance-list li {
+  margin: 0 !important;
+}
+.page-header .page-bar.balance .balance-box .balance-list li:nth-child(2) {
+  display: none;
+}
+
+.page-header .page-bar.balance .balance-box .balance-list li.caption-subject {
+  border-radius: 8px 0 0 8px !important;
+  background: var(--clr-charcoal-black);
+  color: var(--clr-white);
+  font-size: 16px;
+  line-height: 140%; /* 22.4px */
+  letter-spacing: 0.32px;
+  padding: 8px 12px;
+}
+
+.page-header
+  .page-bar.balance
+  .balance-box
+  .balance-list
+  .customer-balance-amount-head,
+.page-header
+  .page-bar.balance
+  .balance-box
+  .balance-list
+  .customer-balance-amount-head-stars,
+.page-header
+  .page-bar.balance
+  .balance-box
+  .balance-list
+  .customer-credit-amount-head,
+.page-header
+  .page-bar.balance
+  .balance-box
+  .balance-list
+  .customer-credit-amount-head-stars {
+  border-radius: 0 8px 8px 0 !important;
+  background: var(--clr-charcoal-black);
+  color: var(--clr-white);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 140%; /* 22.4px */
+  letter-spacing: 0.32px;
+  padding: 8px 12px;
+  margin-right: 10px !important;
+}
+
+.page-header
+  .page-bar.balance
+  .balance-box
+  .balance-list
+  .customer-balance-amount-head
+  span,
+.page-header
+  .page-bar.balance
+  .balance-box
+  .balance-list
+  .customer-credit-amount-head
+  span {
+  color: var(--clr-white) !important;
+}
+
+.page-header
+  .page-bar.balance
+  .balance-box
+  .balance-list
+  .btn-balance-responsive
+  button {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 140%; /* 22.4px */
+  padding: 8px 16px;
+}
+
+.portlet {
+  border-radius: 12px;
+  border: 1px solid var(--clr-stroke);
+  background: var(--clr-white);
+  padding: 12px;
+}
+
+.portlet > .portlet-title {
+  border: none;
+}
+
+.wallet-balance .portlet {
+  background-color: var(--clr-secondary);
+  background-image: url("/themes/black_green_tagmarkets/images/credit-card-front.svg");
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: contain;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.wallet-balance .portlet .portlet-body br {
+  display: none;
+}
+
+.wallet-balance
+  .portlet
+  .portlet-body
+  .wallet-content
+  .customer-balance-amount
+  > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-left: 0;
+}
+
+.wallet-balance
+  .portlet
+  .portlet-body
+  .wallet-content
+  .customer-balance-amount
+  > div
+  > * {
+    width: calc(100% - 100px);
+    text-align: left;
+  }
+
+.wallet-balance
+  .portlet
+  .portlet-body
+  .wallet-content
+  .customer-balance-amount
+  > div,
+.wallet-balance
+  .portlet
+  .portlet-body
+  .wallet-content
+  .customer-balance-amount
+  > div
+  > span {
+  color: var(--clr-text) !important;
+  font-family: "ClashDisplay-Medium", Arial;
+  font-size: 28px !important;
+  font-weight: 500 !important;
+  line-height: 110%; /* 30.8px */
+  letter-spacing: 0.56px;
+  align-self: center;
+}
+
+.wallet-balance
+  .portlet
+  .portlet-body
+  .wallet-content
+  .customer-balance-amount
+  > div
+  .currency-tile-primary {
+  background: transparent;
+  width: auto;
+  height: auto;
+  font-size: 28px;
+  line-height: 110%;
+  display: flex;
+}
+
+.wallet-balance .portlet .portlet-body .wallet-content .wallet-balance-amount {
+  min-height: unset !important;
+}
+
+.wallet-balance
+  .portlet
+  .portlet-body
+  .wallet-content
+  .wallet-balance-amount
+  span {
+  height: auto;
+}
+
+.wallet-balance
+  .portlet
+  .portlet-body
+  .wallet-content
+  .customer-balance-amount
+  > div
+  .currency-tile-primary
+  > span {
+  color: #4f6421 !important;
+  font-family: "ClashDisplay-Medium", Arial;
+  font-size: 28px !important;
+  line-height: 110%;
+  letter-spacing: 0.56px;
+  align-self: center;
+  font-weight: 500 !important;
+}
+
+.wallet-balance #btn-balances-my-wallet,
+.wallet-balance #btn-balances-my-wallet-deposit,#uploadPhotoContainer,#accordion #addemail,.member_trading button.btn-theme-primary {
+  text-transform: none !important;
+  display: flex;
+  padding: 8px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--clr-text);
+  background: var(--clr-text);
+  color: var(--clr-white);
+  font-family: "Geist-Medium", Arial;
+  font-size: 16px;
+  line-height: 140%; /* 22.4px */
+  font-weight: 500;
+}
+
+/* BTN Primary */
+.btn-theme-primary {
+  display: inline-block;
+  background: var(--clr-secondary);
+  color: var(--clr-text);
+  border: none;
+  border-radius: 8px !important;
+}
+
+.account-manager .btn-theme-primary {
+  background: transparent;
+}
+
+.btn-theme-secondary {
+  display: inline-block;
+  background: var(--clr-text);
+  color: var(--clr-white);
+  border: none;
+  border-radius: 8px !important;
+}
+
+.btn-theme-secondary:hover {
+  color: var(--clr-secondary);
+}
+
+.page-header.navbar .menu-toggler.sidebar-toggler {
+  display: none;
+}
+
+.page-sidebar {
+  background-color: var(--clr-text);
+}
+
+.page-sidebar .page-sidebar-menu {
+  padding-top: 20px;
+  padding-inline: 15px;
+}
+
+/* TEMP - TO BE REMOVED */
+.page-sidebar .page-sidebar-menu > li.heading {
+  display: none;
+}
+
+.page-sidebar .page-sidebar-menu > li.nav-item {
+  margin-bottom: 12px;
+}
+
+.page-sidebar .page-sidebar-menu > li.nav-item > a {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px !important;
+}
+
+.page-sidebar .page-sidebar-menu > li.nav-item > a > i {
+  color: var(--clr-dove-gray);
+}
+
+.page-sidebar .page-sidebar-menu > li.nav-item > a > i::before {
+  color: var(--clr-dove-gray);
+}
+
+.page-sidebar .page-sidebar-menu > li.nav-item > a > span {
+  color: var(--clr-dove-gray);
+  font-family: "Geist-Regular", Arial;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.16px;
+}
+
+.page-sidebar .page-sidebar-menu > li.nav-item > a > span.badge {
+  display: flex;
+  padding: 1px 7px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border-radius: 100px !important;
+  background: var(--clr-secondary);
+  float: unset;
+  position: unset;
+  font-size: 14px !important;
+  color: var(--clr-text);
+  margin: 0 !important;
+}
+
+.page-sidebar .page-sidebar-menu > li.nav-item.menu-selected > a {
+  background-color: var(--clr-gunmetal);
+  border-radius: 10px;
+
+}
+
+.page-sidebar .page-sidebar-menu > li.nav-item.menu-selected > a span {
+  color: var(--clr-white);
+ 
+}
+
+.dashboard-trading-accounts .portlet,
+.market-watch .portlet {
+  background-color: #1c1c1c;
+  color: var(--clr-white);
+}
+
+.dashboard-trading-accounts .portlet .portlet-title h2,
+.market-watch .portlet .portlet-title h2 {
+  color: var(--clr-white);
+}
+
+.dashboard-trading-accounts .portlet table thead,
+.market-watch .portlet table thead {
+  color: var(--clr-dove-gray);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 120%; /* 14.4px */
+  letter-spacing: 0.12px;
+}
+
+.dashboard-trading-accounts .portlet .table-striped > tbody > tr,
+.market-watch .portlet .table-striped > tbody > tr {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 120%; /* 15.6px */
+  letter-spacing: 0.13px;
+}
+
+.dashboard-trading-accounts .portlet .table-striped > tbody > tr:nth-of-type(odd),
+.market-watch .portlet .table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: var(--clr-charcoal-black);
+  color: var(--clr-white);
+}
+
+.dashboard-trading-accounts .portlet .table-striped > tbody > tr:nth-of-type(even),
+.market-watch .portlet .table-striped > tbody > tr:nth-of-type(even) {
+  background-color: transparent;
+  color: var(--clr-white);
+}
+
+.successMessage,
+.errorMessage,
+.warningMessage {
+    font-family: "Geist-Regular", Arial;
+}
+
+.form-control {
+    outline: 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--clr-stroke);
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .wallet-balance .portlet .portlet-body .wallet-content > .row:nth-child(2) {
+    justify-content: flex-start;
+  }
+
+  .wallet-balance
+    .portlet
+    .portlet-body
+    .wallet-content
+    > .row:nth-child(2)
+    > div {
+    width: auto;
+    margin-bottom: 0 !important;
+  }
+
+  .wallet-balance #btn-balances-my-wallet,
+  .wallet-balance #btn-balances-my-wallet-deposit {
+    min-width: unset;
+  }
+}
+
+li.document-category > div.center-block > span {
+  color: #333 !important;
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .page-content-wrapper .page-content {
+    padding-top: 25px !important;
+  }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+}
+
+/* Very Large devices (very large resolutions, 1450px and up) */
+@media (min-width: 1450px) {
+}
+
+/* Very Large devices (very large resolutions, 14600 and up) */
+@media (min-width: 1650px) {
+}
+
+/* Very Large devices (very large resolutions, 14600 and up) */
+@media (min-width: 1800px) {
+}
+
+@media only screen and (max-width:791px){
+   .page-header.navbar {height: 124px;}
+}
+
+
+/* Webfont: Clash Display - Medium */
+@font-face {
+    font-family: 'ClashDisplay-Medium';
+    src: url("/fonts/ClashDisplay-Medium.eot"); /* IE9 Compat Modes */
+    src: url("/fonts/ClashDisplay-Medium.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+         url("/fonts/ClashDisplay-Medium.woff") format("woff"), /* Modern Browsers */
+         url("/fonts/ClashDisplay-Medium.woff2") format("woff2"), /* Modern Browsers */
+         url("/fonts/ClashDisplay-Medium.ttf") format("truetype"); /* Safari, Android, iOS */
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Webfont: Geist - Regular */
+@font-face {
+    font-family: 'Geist-Regular';
+    src: url("/fonts/Geist-Regular.woff2") format("woff2"), /* Modern Browsers */
+         url("/fonts/Geist-Regular.ttf") format("truetype"); /* Safari, Android, iOS */
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Webfont: Geist - Medium */
+@font-face {
+    font-family: 'Geist-Medium';
+    src: url("/fonts/Geist-Medium.woff2") format("woff2"), /* Modern Browsers */
+         url("/fonts/Geist-Medium.ttf") format("truetype"); /* Safari, Android, iOS */
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Webfont: Geist - Semibold*/
+@font-face {
+    font-family: 'Geist-Semibold';
+    src: url("/fonts/Geist-SemiBold.woff2") format("woff2"), /* Modern Browsers */
+         url("/fonts/Geist-SemiBold.ttf") format("truetype"); /* Safari, Android, iOS */
+    font-style: normal;
+    font-display: swap;
+}

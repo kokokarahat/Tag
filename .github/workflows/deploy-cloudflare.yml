@@ -1,0 +1,50 @@
+name: Deploy to Cloudflare
+
+# Manual only: nothing deploys until you run this workflow yourself.
+# Required repository secrets:
+#   CLOUDFLARE_API_TOKEN   — token with "Workers Scripts: Edit" + "Workers R2 Storage: Edit"
+#   CLOUDFLARE_ACCOUNT_ID  — your Cloudflare account id
+# Runtime secrets are set on the Worker (see docs/deployment.md), not here.
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        type: choice
+        default: production
+        options: [production, staging]
+
+concurrency:
+  group: deploy-cloudflare-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and deploy worker
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build OpenNext bundle
+        run: npm run cf:build
+
+      - name: Deploy with Wrangler
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy

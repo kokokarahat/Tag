@@ -1,0 +1,397 @@
+
+
+		<style>
+			.deposit-view-content .psp-img {
+				border: 1px solid #EAEAEA;
+				background-color: white;
+				cursor: pointer;
+			}
+
+			.deposit-view-content .psp-selection-header {
+				color: #444444;
+				font-size: 16px;
+			}
+
+			.deposit-view-content .psp-content {
+				display: flex;
+				align-items: center;
+			}
+
+			.deposit-view-content .deposit-option {
+				height: 100px;
+				display: flex;
+				align-items: center;
+			}
+
+			.deposit-view-content .nav-stacked li {				
+				margin: 0px 8px 0px 0px;
+			}
+
+			.deposit-view-content .nav-pills-responsive {
+				display: inline-flex;
+			}
+
+			.deposit-view-content .nav-pills-responsive li {
+				padding-left: 20px;
+				padding-right: 20px;
+				margin: 0px;
+			}
+
+			.deposit-view-content .slimScrollDiv {
+				background-color: #F7F7F7;
+				/*margin-bottom: 20px;*/
+			}
+
+			.deposit-view-content .slimScrollDiv .slimScrollBarX,.slimScrollRailX{
+				width:90%;
+				margin-left: 20px;
+			}
+
+			.mobile-responsive-alt {
+				overflow-x: auto;
+				overflow-y: hidden;
+				width: 100%;
+			}
+
+			/* Large devices (large desktops, 1200px and up) */
+			@media (min-width:  1200px) { 
+				.modal-smc {
+					width:400px;
+					margin:0px auto;
+				}
+			}
+
+			@media (min-width:  1600px) { 
+				.modal-smc {
+					width:500px;
+					margin:0px auto;
+				}
+			}
+
+			@media (min-width: 1650px) {
+				.btn-block{
+					width: 100%;
+				}
+			}
+
+			.scroll-content-psp::-webkit-scrollbar {width: 5px;}
+			.scroll-content-psp::-webkit-scrollbar-track { background-color: #b1b6bd; }
+			.scroll-content-psp::-webkit-scrollbar-thumb { background-color: #868a8f; border-radius: 10px; }
+		</style>
+		<script type="text/javascript">
+			var is_wizard = 0;
+			var owiz_step_id = 0;
+			var view_mode = 'portrait';
+			var flag = 0;
+
+			var setViewportElements = function (viewportWidth) {
+				var viewportWidth = $(window).width();
+				if(viewportWidth>991){
+					flag = 0;
+				}
+				if(flag == 0){
+					if(viewportWidth<=991){
+						flag = 1;
+					}
+					// $('.scroll-content-psp').slimscroll({ destroy: true });
+					$('.scroll-content-psp').removeClass('mobile-responsive-alt');
+
+					if (viewportWidth >= 1600 && view_mode == 'portrait') {
+						$('.scroll-content-psp').removeClass('nav-pills-responsive').addClass('nav-stacked');
+						$('.scroll-content-psp').css('height', '700px');
+						$('.scroll-content-psp').css('overflow-y', 'auto');
+						if ($('.psp-content').hasClass('hidden')){
+							$('.psp-content').removeClass('hidden');
+							$('.btn-selection-back').addClass('hidden');
+						}
+					}
+					else if (viewportWidth > 992 && viewportWidth < 1600 && view_mode == 'portrait') {
+						$('.scroll-content-psp').removeClass('nav-pills-responsive').addClass('nav-stacked');
+						if ($('.psp-content').hasClass('hidden')){
+							$('.psp-content').removeClass('hidden');
+							$('.btn-selection-back').addClass('hidden');
+						}
+					}
+					else {
+						$('.scroll-content-psp').removeClass('nav-stacked').addClass('nav-pills-responsive');
+						// $('.psp-content').addClass('hidden');
+						$('.btn-selection-back').removeClass('hidden');
+						$('.scroll-content-psp').addClass('mobile-responsive-alt');
+						$('.scroll-content-psp').removeAttr("style");
+					}
+
+					if (view_mode == 'landscape') {
+						$('.btn-selection-back').addClass('hidden');
+						$('.psp-container').removeClass('col-md-3 col-lg-3');
+						$('.psp-container').addClass('col-md-12 col-lg-12');
+
+						$('.psp-content').removeClass('col-md-9 col-lg-9');
+						$('.psp-content').addClass('col-md-12 col-lg-12');
+					}
+				}
+			}
+
+			$(document).ready(function() {
+				var default_psp = 0;
+				$('.btn-deposit-back').on('click', function(){
+					// load amout selection view
+					$.ajax({
+						url: '/cfc/controller.cfc?method=getAmountSelectionView',
+						type: 'GET',
+						data: {},
+					})
+					.done(function(result) {
+						$('.modal-deposit-view').addClass('modal-smc');
+						$('.modal-deposit-view').removeClass('modal-lg');
+						$('.deposit-view-content').html(result).fadeIn();
+					});
+				});
+
+				$('.btn-selection-back').on('click', function(){
+					$('.psp-content').addClass('hidden');
+					$('.scroll-content-psp').removeClass('hidden');
+				});
+
+				$('.btn-deposit-close').on('click', function(){
+					// load amout selection view
+					$('.btn-modal-close').trigger('click')
+				});
+
+				$('.psp-img').on('click', function() {
+					var pm_id = $(this).parent().attr('data-id');
+					var pm_title = $(this).parent().attr('data-title');
+					var selected_pm_id = $('.psp-selected').val();
+					var amount = 0.00;
+					var currency_id = "0";
+					var currency = "USD";
+					var currency_sign = "$";
+					var is_prop_trading = "0";
+					var psp_type = $(this).parent().attr('data-type');
+					var depositbuddy_bankwire_pre_submit_verification = "0";
+					var wire_verified = "0";
+
+					console.log(depositbuddy_bankwire_pre_submit_verification);
+
+					var viewportWidth = $(window).width();
+					if (viewportWidth <= 991) {
+						$('.psp-content').removeClass('hidden');
+						if (view_mode == 'portrait') {
+							$('.scroll-content-psp').addClass('hidden');
+						}
+					}
+
+					// show submit to gateway button
+					$('.btn-submit-to-gateway').fadeIn();
+
+					if (pm_id != selected_pm_id) {
+						var bg_color = $(this).closest('.deposit-option').css('background-color');
+						$('.psp-selected').val(pm_id);
+						if (selected_pm_id > 0) {
+							$('*[data-id="' + selected_pm_id +'"]').css('transition','background-color 0.5s ease');
+							$('*[data-id="' + selected_pm_id +'"]').css('background-color',bg_color);
+						}
+
+						$(this).parent().css('transition','background-color 0.5s ease');
+						$(this).parent().css('background-color', $('.btn-theme-primary').css('background-color'));
+					}
+
+					function checkShowHideRulesJson() {
+						$('.psp-welcome-screen').addClass('hidden');
+
+						finrules.checkShowHideRulesJSON({
+							publish : 1
+							,transaction_type : 'DEPOSIT'
+							,transaction_method : 'WIRE'
+							,deny_tx : 1
+							,amount : number.SCAmountFormat({amount: amount, currency: currency})
+							,custom_value : amount
+							,currency : currency
+							,is_prop_trading: is_prop_trading
+							,onSuccess : function () {
+								
+									var page = '_make_deposit_wire_transfer_auth.cfm';
+								
+								
+								var data = "pm_id=" + pm_id + "&currency_id=" + currency_id + "&amount=" + amount + "&is_wizard=" + is_wizard + "&owiz_step_id=" + owiz_step_id + "&is_prop_trading=" + is_prop_trading;
+								data = btoa(encodeURIComponent(data));
+								var url = "https://portal.tagmarkets.com/views/wallet/deposit_modal/" + page + '?data=' + data;
+
+								$('.make-a-deposit').attr('src', url);
+								$('.make-a-deposit').removeClass('hidden');
+
+								// remove height from parent div to solve css confilct with iframe
+								var pspContentObj = $('.psp-content').prop('style'); 
+								pspContentObj.removeProperty('height');
+							}
+							,onFail : function () {
+								// $('.submit-div .wire-submit-button').attr("disabled", false);
+							}
+						});
+					}
+
+					if (psp_type == 'WIRE') {
+						if(depositbuddy_bankwire_pre_submit_verification == 0){
+							checkShowHideRulesJson();
+						}
+						else{
+							if(wire_verified == 0){
+								$.ajax({
+									url: '/cfc/controller.cfc?method=getDocumentManagerView',
+									type: 'POST',
+									data: {
+										cdc_id  : '0',
+										force_show : 1,
+										default_type_id: '0',
+										default_cdc_id : '0',
+										show_all_document_types : 0,
+										canDelete : 0
+									},
+								})
+								.done(function(response) {
+									$('body').append(response);
+								});
+							}
+							else{
+								checkShowHideRulesJson();
+							}
+						}
+
+					}
+					else {
+						var manual_deposit = psp_type =="ManualDeposit" ? 1 : 0;
+						$.ajax({
+							url: '/cfc/controller.cfc?method=getDepositGatewayView',
+							type: 'POST',
+							data: {
+								pm_id    : pm_id,
+								amount   : amount,
+								currency : currency,
+								currency_sign : currency_sign,
+								manual_deposit : manual_deposit,
+								is_prop_trading: is_prop_trading,
+								additional_data : btoa('')
+							},
+						})
+						.done(function(result) {
+							if (psp_type =="ManualDeposit") {
+								$('.psp-welcome-screen').removeClass('hidden');
+								$('.psp-welcome-screen').html(result);
+								$('.make-a-deposit').addClass('hidden');
+							}
+							else {
+								$('.psp-welcome-screen').addClass('hidden');
+								var data = "pm_id=" + pm_id + "&currency=" + currency + "&amount=" + amount + "&currency_sign=" + currency_sign + "&is_prop_trading=" + is_prop_trading + "&additional_data=" + btoa('');
+								data = btoa(encodeURIComponent(data));
+								var url = "https://portal.tagmarkets.com/views/wallet/deposit_modal/_make_deposit_gateway.cfm?data=" + data;
+								$('.make-a-deposit').attr('src', url);
+								$('.make-a-deposit').removeClass('hidden');
+
+								// remove height from parent div to solve css confilct with iframe
+								var pspContentObj = $('.psp-content').prop('style'); 
+								pspContentObj.removeProperty('height');
+							}
+						});	
+					}
+
+				});
+
+				$(window).resize (function () {
+					setViewportElements();
+				});		
+
+				setViewportElements();
+
+				// if only one PSP is available then select it
+				var totalPSPs = $('.psp-img').length;
+
+				if (totalPSPs == 1) {
+					if (1 == 0) {
+						$('.psp-container').addClass('hidden');
+						$('.psp-content').removeClass('col-md-9');
+						$('.psp-content').addClass('col-md-12');
+					}
+
+					$('.psp-img').trigger('click');
+				}
+				else if (default_psp > 0){
+					if ($('[data-pm_id=' + default_psp + ']').length > 0) {
+						$('[data-pm_id=' + default_psp + ']').trigger('click');
+					}
+				}	
+
+				$('.deposit_amount').html('$0.00');
+				
+				$('.make-deposit-title').html('Make a Deposit');
+			});	
+		</script>
+		
+
+		
+		
+
+		<div class="row" style="margin-top: -15px;">
+
+			<div class="psp-container col-xs-12 col-sm-12 col-md-3 col-lg-3" style="background-color: #F7F7F7;">
+				<div class="row">
+					<div class="psp-selection-header text-center margin-top-20"><label><strong>Payment method</strong></label></div>
+					<ul class="nav nav-pills nav-stacked psp-list scroll-content-psp">
+						
+									<li class="deposit-option" data-category="PAYMENT_GATEWAY" data-name="Paymaxis" data-id="196" data-title="Paymaxis" data-type="Paymaxis">
+										<img src="/images/media/image/paymaxislogo.png" class="center-block psp-img" data-pm_id="196" width="120" height="80"/>
+									</li>
+								
+									<li class="deposit-option" data-category="PAYMENT_GATEWAY" data-name="cryptochill" data-id="220" data-title="Crypto" data-type="cryptochill">
+										<img src="/images/media/image/Crypto.png" class="center-block psp-img" data-pm_id="220" width="120" height="80"/>
+									</li>
+								
+									<li class="deposit-option" data-category="PAYMENT_GATEWAY" data-name="Praxis" data-id="59" data-title="Praxis" data-type="Praxis">
+										<img src="/images/media/image/praxistag.png" class="center-block psp-img" data-pm_id="59" width="120" height="80"/>
+									</li>
+								
+									<li class="deposit-option" data-category="WIRE" data-name="WIRE" data-id="7" data-title="Wire Transfer" data-type="WIRE">
+										<img src="/images/media/image/icon-wiretransfer.png" class="center-block psp-img" data-pm_id="7" width="120" height="80"/>
+									</li>
+								
+					</ul>
+					<input type="hidden" class="psp-selected" value="0">						
+				</div>
+			</div>
+			<div class="psp-content col-md-9" style="height: 750px;">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center" style="color: #444444;">
+					
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<button type="button" class="btn btn-theme-primary btn-block btn-selection-back hidden">Back to Selection</button>
+				</div>
+					<iframe class="make-a-deposit hidden margin-top-30" name="if_make_deposit" target="_self" src="" allow="clipboard-write" style="border:0px; width:100%; min-height:710px; overflow-x: hidden; overflow-y: auto;">
+					</iframe>
+					<div class="psp-welcome-screen">
+						You have selected the amount of <strong><span class="deposit_amount"></span></strong> to deposit. To change the amount press <strong><a class="btn-deposit-back" style="text-decoration:none; color:#444444">Back</a></strong>.<br/> Please select your preferred <strong>Payment method</strong> from the left
+						<div class="center-block">
+							<img src="/images/media/image/wallet.png" class="margin-top-20" width="100" height="80"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+				
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="row">
+						<hr>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+					<button type="button" class="btn btn-theme-primary btn-block btn-deposit-back">&lt; Back</button>				
+				</div>
+				
+
+				<script type="text/javascript">
+					var psp_count = 5;
+					var remove_back_button_on_one_psp = 0;
+
+					if(psp_count==1 && remove_back_button_on_one_psp ==1 && $('.btn-deposit-back').length){
+						$('.btn-deposit-back').addClass('hidden');
+					}
+				</script>
+			
+		</div>
+	<script>window.__CF$cv$params={r:'a575ce96ad5d0dd4',t:'MTc5NDE1Mzc5OA==',u:'01a1bbd715d473caae0842915a232a93',ut:'YmkkssOExJRbKmI4ptndgxd1CS07b9hi73MfUm0vyEQ-1794153798-1.2.1.1-P7FQ5p4us5DgxMzdIuerHc.ZLMzQIh_KjvlaJjXToAFZXwIjyJeYCMYfF_lyvc7iMTNX9o0T_QktfIGTWEBGIu3iVdIMwANC.ZMvi7P6Eok',i:60};(function(){if(!document.body)return;var l=window.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/precursor/main.js?ray=a575ce96ad5d0dd4',s=document.createElement('script');s.src=o?new URL(u,o).href:u;document.head.appendChild(s);})();</script>

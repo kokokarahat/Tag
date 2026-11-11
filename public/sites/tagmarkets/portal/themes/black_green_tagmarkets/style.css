@@ -1,0 +1,598 @@
+
+.portlet  {
+    border-radius: 12px !important;
+}
+
+.well {
+    background-color: var(--clr-bg);
+    border-radius: 12px !important;
+}
+
+button.btn.btn-default:not(.multiselect) {
+    border: none;
+    background: var(--clr-text);
+    color: var(--clr-white);
+    border-radius: 12px !important;
+}
+
+.wallet-balance .btn-add-wallet,#account-history-table_previous,#account-history-table_next,.account-manager hr,.dashboard-trading-accounts .dropdown-toggle,#nf_risk_button {
+    display: none !important;
+}
+
+
+.fa-home:before {
+    content: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='Chart'%3E%3Cpath id='Vector 8' d='M8 10L8 16' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath id='Vector 9' d='M12 12V16' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath id='Vector 10' d='M16 8V16' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect id='Rounded Rectangle' x='3' y='4' width='18' height='16' rx='2' stroke='white' stroke-width='1.5'/%3E%3C/g%3E%3C/svg%3E%0A") !important;
+}
+
+
+.fa-profile:before {
+    content:  url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='User'%3E%3Cpath id='Ellipse 45' d='M19.7274 20.4471C19.2716 19.1713 18.2672 18.0439 16.8701 17.2399C15.4729 16.4358 13.7611 16 12 16C10.2389 16 8.52706 16.4358 7.12991 17.2399C5.73276 18.0439 4.72839 19.1713 4.27259 20.4471' stroke='%23878787' stroke-width='1.5' stroke-linecap='round'/%3E%3Ccircle id='Ellipse 46' cx='12' cy='8' r='4' stroke='%23878787' stroke-width='1.5' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E%0A") !important;
+}
+
+
+.icon-envelope:before {
+   content:  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23' fill='none'%3E%3Cg clip-path='url(%23clip0_3105_303)'%3E%3Cpath d='M17.3948 8.22815C17.3948 6.76946 16.8153 5.37051 15.7839 4.33906C14.7524 3.30761 13.3535 2.72815 11.8948 2.72815C10.4361 2.72815 9.03714 3.30761 8.00569 4.33906C6.97424 5.37051 6.39478 6.76946 6.39478 8.22815C6.39478 14.6448 3.64478 16.4781 3.64478 16.4781H20.1448C20.1448 16.4781 17.3948 14.6448 17.3948 8.22815Z' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M13.4805 20.1448C13.3193 20.4226 13.088 20.6532 12.8097 20.8135C12.5314 20.9738 12.2159 21.0582 11.8947 21.0582C11.5735 21.0582 11.2579 20.9738 10.9796 20.8135C10.7013 20.6532 10.47 20.4226 10.3088 20.1448' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='17.9496' cy='3.18644' r='2.29167' fill='%23FF4912'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_3105_303'%3E%3Crect width='22' height='22' fill='white' transform='translate(0.894775 0.894775)'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E") !important;
+}
+
+.fa-whatsapp:before {
+   content:  url("data:image/svg+xml,%3Csvg width='60' height='68' viewBox='0 0 60 68' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='7.09229' width='45.8156' height='45.8156' rx='8' fill='%23CAFD5D'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M20.8575 22.37C20.8575 20.5617 21.3938 18.794 22.3984 17.2904C23.4031 15.7868 24.831 14.615 26.5017 13.923C28.1723 13.2309 30.0107 13.0499 31.7843 13.4027C33.5578 13.7554 35.187 14.6262 36.4656 15.9049C37.7443 17.1836 38.6151 18.8127 38.9679 20.5863C39.3207 22.3598 39.1396 24.1982 38.4476 25.8689C37.7556 27.5395 36.5837 28.9675 35.0801 29.9721C33.5766 30.9768 31.8089 31.513 30.0005 31.513C28.2707 31.5161 26.5759 31.0258 25.115 30.0996C24.985 30.0174 24.8389 29.964 24.6866 29.943C24.5342 29.9221 24.3792 29.934 24.2318 29.978L21.134 30.902L22.3011 28.1731C22.3689 28.0142 22.3975 27.8414 22.3844 27.6691C22.3713 27.4969 22.3169 27.3303 22.2258 27.1835C21.3286 25.7385 20.8546 24.0709 20.8575 22.37ZM30.0005 11.0757C23.7629 11.0757 18.7062 16.1323 18.7062 22.37C18.7062 24.347 19.215 26.2079 20.11 27.8268L18.2545 32.1659C18.1742 32.3539 18.1491 32.5608 18.1821 32.7625C18.2152 32.9643 18.3051 33.1524 18.4412 33.3049C18.5773 33.4573 18.754 33.5679 18.9507 33.6235C19.1474 33.6792 19.3559 33.6777 19.5517 33.6191L24.3921 32.1756C26.0992 33.1538 28.033 33.6672 30.0005 33.6643C36.2382 33.6643 41.2949 28.6077 41.2949 22.37C41.2949 16.1323 36.2382 11.0757 30.0005 11.0757ZM32.467 24.7171L31.0525 25.7131C30.2732 25.2647 29.5576 24.7137 28.9249 24.0749C28.2457 23.3966 27.6584 22.6321 27.178 21.801L28.0762 21.0383C28.2634 20.8796 28.3906 20.6615 28.4368 20.4205C28.4829 20.1794 28.4453 19.9298 28.3301 19.7131L27.1856 17.5618C27.1094 17.419 27.002 17.2951 26.8713 17.1996C26.7406 17.104 26.59 17.0392 26.4308 17.0099C26.2715 16.9806 26.1078 16.9877 25.9516 17.0306C25.7955 17.0734 25.6511 17.151 25.5291 17.2574L25.1892 17.5532C24.3728 18.2653 23.8898 19.4356 24.2899 20.621C24.9337 22.496 25.999 24.1983 27.4039 25.5969C29.3541 27.5471 31.3354 28.3151 32.495 28.6141C33.4286 28.854 34.3117 28.5324 34.9345 28.0247L35.5703 27.5062C35.7043 27.3969 35.81 27.2569 35.8784 27.0981C35.9468 26.9393 35.9759 26.7663 35.9632 26.5938C35.9506 26.4213 35.8965 26.2545 35.8056 26.1073C35.7147 25.9602 35.5897 25.8371 35.4412 25.7486L33.6362 24.673C33.4578 24.5665 33.2522 24.5139 33.0446 24.5218C32.8369 24.5296 32.6359 24.5974 32.4659 24.7171H32.467Z' fill='%23171717'/%3E%3Cpath d='M0.264 56.2956H1.62L3.276 63.0636L4.944 56.2956H6.252L7.932 63.0636L9.564 56.2956H10.944L8.688 64.8156H7.2L5.604 58.7316L4.008 64.8156H2.52L0.264 56.2956ZM12.2831 56.2956H13.5311V59.3076C13.9031 58.6116 14.6231 58.3116 15.4031 58.3116C16.8311 58.3116 17.5391 59.3676 17.5391 60.7236V64.8156H16.2911V61.1556C16.2911 60.0396 15.9551 59.4276 15.0671 59.4276C14.1191 59.4276 13.5311 60.0396 13.5311 61.1556V64.8156H12.2831V56.2956ZM19.2044 60.3516C19.4564 59.0796 20.4644 58.3116 21.9044 58.3116C23.6324 58.3116 24.5684 59.2716 24.5684 60.9996V63.3996C24.5684 63.6996 24.7004 63.8076 24.9524 63.8076H25.2164V64.8156H24.7964C24.2204 64.8276 23.4644 64.7076 23.4164 63.8436C23.1404 64.4436 22.4324 64.9596 21.3884 64.9596C20.1164 64.9596 19.0964 64.2876 19.0964 63.1476C19.0964 61.8636 20.0444 61.5036 21.4964 61.2276L23.3204 60.8676C23.3084 59.8476 22.8404 59.3556 21.9044 59.3556C21.1604 59.3556 20.6684 59.7276 20.4884 60.4356L19.2044 60.3516ZM20.3924 63.1236C20.3924 63.5916 20.7884 63.9756 21.6284 63.9756C22.6004 63.9756 23.3444 63.2916 23.3444 61.8996V61.8396L21.9764 62.0796C21.0884 62.2356 20.3924 62.3076 20.3924 63.1236ZM26.7769 57.0156H28.0249V58.4556H29.7169V59.4876H28.0249V63.0036C28.0249 63.5196 28.2769 63.7836 28.7689 63.7836H29.7049V64.8156H28.6609C27.4369 64.8156 26.7769 64.1796 26.7769 63.0036V59.4876H25.8169V58.4556H26.7769V57.0156ZM34.6424 60.4476C34.5104 59.7756 33.8624 59.3676 33.2024 59.3676C32.5544 59.3676 32.0264 59.7036 32.0384 60.2676C32.0384 60.8436 32.7944 61.0836 33.4424 61.2036C35.0024 61.4916 36.0344 61.9116 36.0344 63.1596C36.0344 64.4076 34.7624 64.9596 33.4544 64.9596C31.8464 64.9596 30.6824 64.1316 30.5864 62.8116L31.8704 62.7276C31.9904 63.4476 32.5544 63.8916 33.4424 63.8916C34.0064 63.8916 34.7384 63.6996 34.7384 63.1116C34.7264 62.4156 33.9224 62.3316 33.2264 62.1756C31.9064 61.8876 30.7424 61.5396 30.7424 60.3156C30.7424 59.0796 31.7384 58.3116 33.3104 58.3116C34.6664 58.3116 35.7224 59.1156 35.9264 60.3756L34.6424 60.4476ZM36.8406 64.8156L39.9126 56.2956H41.5086L44.5806 64.8156H43.2366L42.4566 62.5716H38.9646L38.1846 64.8156H36.8406ZM39.3726 61.4076H42.0486L40.7166 57.4956L39.3726 61.4076ZM45.93 66.6156V58.4556H47.094L47.13 59.3796C47.478 58.6956 48.138 58.3116 49.062 58.3116C50.934 58.3116 51.798 59.8596 51.798 61.6356C51.798 63.4116 50.934 64.9596 49.062 64.9596C48.186 64.9596 47.538 64.6116 47.178 63.9516V66.6156H45.93ZM47.058 61.6356C47.058 62.7756 47.574 63.8676 48.774 63.8676C49.986 63.8676 50.478 62.7876 50.478 61.6356C50.478 60.4956 49.986 59.4036 48.774 59.4036C47.562 59.4036 47.058 60.4956 47.058 61.6356ZM53.3508 66.6156V58.4556H54.5148L54.5508 59.3796C54.8988 58.6956 55.5588 58.3116 56.4828 58.3116C58.3548 58.3116 59.2188 59.8596 59.2188 61.6356C59.2188 63.4116 58.3548 64.9596 56.4828 64.9596C55.6068 64.9596 54.9588 64.6116 54.5988 63.9516V66.6156H53.3508ZM54.4788 61.6356C54.4788 62.7756 54.9948 63.8676 56.1948 63.8676C57.4068 63.8676 57.8988 62.7876 57.8988 61.6356C57.8988 60.4956 57.4068 59.4036 56.1948 59.4036C54.9828 59.4036 54.4788 60.4956 54.4788 61.6356Z' fill='white'/%3E%3C/svg%3E%0A") !important;
+}
+
+.fa-phone:before { 
+ content:  url("data:image/svg+xml,%3Csvg width='54' height='67' viewBox='0 0 54 67' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='5' y='0.907776' width='44' height='44' rx='8' fill='%23CAFD5D'/%3E%3Cpath d='M16.9736 22.8285C16.9736 17.3348 21.4272 12.8812 26.921 12.8812V12.8812C32.4148 12.8812 36.8684 17.3348 36.8684 22.8285V29.1587C36.8684 30.2114 36.8684 30.7377 36.7116 31.1581C36.4595 31.8339 35.9264 32.367 35.2506 32.6191C34.8302 32.7759 34.3038 32.7759 33.2511 32.7759H26.921C21.4272 32.7759 16.9736 28.3223 16.9736 22.8285V22.8285Z' stroke='%23171717' stroke-width='2'/%3E%3Cpath d='M23.1907 21.585L30.6512 21.585' stroke='%23171717' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M26.9209 26.5591H30.6512' stroke='%23171717' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M0.544 63.9078V55.3878H1.816V62.7318H5.968V63.9078H0.544ZM7.57609 57.5478H8.82409V63.9078H7.57609V57.5478ZM7.56409 56.5998V55.3878H8.86009V56.5998H7.56409ZM16.2839 57.5478L13.9559 63.9078H12.5039L10.1759 57.5478H11.4599L13.2359 62.6238L14.9999 57.5478H16.2839ZM16.8883 60.7278C16.8883 58.6998 18.0763 57.4038 19.9003 57.4038C21.3883 57.4038 22.6843 58.3878 22.7563 60.6558L22.7683 61.0878H18.1963C18.2923 62.2758 18.8923 62.9718 19.9003 62.9718C20.5363 62.9718 21.1003 62.6118 21.3643 61.9998L22.6723 62.0958C22.3003 63.2958 21.1843 64.0518 19.9003 64.0518C18.0763 64.0518 16.8883 62.7558 16.8883 60.7278ZM18.2203 60.1278H21.4483C21.2803 58.9038 20.6203 58.4838 19.9003 58.4838C18.9643 58.4838 18.3763 59.0958 18.2203 60.1278ZM34.4829 61.1598C34.1589 62.8878 32.9589 64.0998 30.9669 64.0998C28.4949 64.0998 27.0429 62.1318 27.0429 59.6598C27.0429 57.1758 28.4829 55.1958 30.9669 55.1958C32.8269 55.1958 34.0389 56.3238 34.4229 57.9558L33.1029 58.0398C32.8389 57.0438 32.1189 56.3718 30.9669 56.3718C29.1429 56.3718 28.3629 57.8838 28.3629 59.6598C28.3629 61.4238 29.1549 62.9238 30.9669 62.9238C32.1669 62.9238 32.9229 62.1678 33.1389 61.0878L34.4829 61.1598ZM36.0667 55.3878H37.3147V58.3998C37.6867 57.7038 38.4067 57.4038 39.1867 57.4038C40.6147 57.4038 41.3227 58.4598 41.3227 59.8158V63.9078H40.0747V60.2478C40.0747 59.1318 39.7387 58.5198 38.8507 58.5198C37.9027 58.5198 37.3147 59.1318 37.3147 60.2478V63.9078H36.0667V55.3878ZM42.988 59.4438C43.24 58.1718 44.248 57.4038 45.688 57.4038C47.416 57.4038 48.352 58.3638 48.352 60.0918V62.4918C48.352 62.7918 48.484 62.8998 48.736 62.8998H49V63.9078H48.58C48.004 63.9198 47.248 63.7998 47.2 62.9358C46.924 63.5358 46.216 64.0518 45.172 64.0518C43.9 64.0518 42.88 63.3798 42.88 62.2398C42.88 60.9558 43.828 60.5958 45.28 60.3198L47.104 59.9598C47.092 58.9398 46.624 58.4478 45.688 58.4478C44.944 58.4478 44.452 58.8198 44.272 59.5278L42.988 59.4438ZM44.176 62.2158C44.176 62.6838 44.572 63.0678 45.412 63.0678C46.384 63.0678 47.128 62.3838 47.128 60.9918V60.9318L45.76 61.1718C44.872 61.3278 44.176 61.3998 44.176 62.2158ZM50.5605 56.1078H51.8085V57.5478H53.5005V58.5798H51.8085V62.0958C51.8085 62.6118 52.0605 62.8758 52.5525 62.8758H53.4885V63.9078H52.4445C51.2205 63.9078 50.5605 63.2718 50.5605 62.0958V58.5798H49.6005V57.5478H50.5605V56.1078Z' fill='white'/%3E%3C/svg%3E%0A") !important;
+}
+
+.fa-user-headset:before { 
+ content:  url("data:image/svg+xml,%3Csvg width='47' height='67' viewBox='0 0 47 67' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect y='0.907776' width='47' height='44' rx='8' fill='%23CAFD5D'/%3E%3Cpath d='M23.5 32.9078C29.0228 32.9078 33.5 28.4306 33.5 22.9078C33.5 17.3849 29.0228 12.9078 23.5 12.9078C17.9772 12.9078 13.5 17.3849 13.5 22.9078C13.5 28.4306 17.9772 32.9078 23.5 32.9078Z' stroke='%23171717' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M23.5 27.9078H23.51' stroke='%23171717' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20.5901 19.9078C20.8252 19.2395 21.2892 18.6759 21.9 18.3169C22.5108 17.958 23.229 17.8267 23.9273 17.9465C24.6255 18.0663 25.2589 18.4293 25.7152 18.9713C26.1714 19.5133 26.4211 20.1993 26.4201 20.9078C26.4201 22.9078 23.4201 23.9078 23.4201 23.9078' stroke='%23171717' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M12.544 55.3878H18.052V56.5638H13.816V59.1678H17.836V60.3198H13.816V63.9078H12.544V55.3878ZM18.0598 63.9078L21.1318 55.3878H22.7278L25.7998 63.9078H24.4558L23.6758 61.6638H20.1838L19.4038 63.9078H18.0598ZM20.5918 60.4998H23.2678L21.9358 56.5878L20.5918 60.4998ZM30.3725 64.0998C27.9005 64.0998 26.4485 62.1318 26.4485 59.6598C26.4485 57.1758 27.8885 55.1958 30.3725 55.1958C32.8685 55.1958 34.3085 57.1758 34.3085 59.6598C34.3085 61.2078 33.7325 62.5638 32.7005 63.3558L33.7565 64.7118H32.5685L31.8725 63.8358C31.4285 64.0038 30.9245 64.0998 30.3725 64.0998ZM27.7685 59.6598C27.7685 61.4238 28.6205 62.9238 30.3725 62.9238C30.6365 62.9238 30.8765 62.8998 31.0925 62.8278L29.9045 61.3038H31.1045L31.9205 62.3718C32.6285 61.7958 32.9885 60.7878 32.9885 59.6598C32.9885 57.8838 32.1485 56.3718 30.3725 56.3718C28.6085 56.3718 27.7685 57.8838 27.7685 59.6598Z' fill='white'/%3E%3C/svg%3E%0A") !important;
+}
+
+.fa-user-headset {
+    margin-left: 6px;
+}
+
+.fa-folder:before {
+    content:  url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.00001 6.5V6.5C3.00001 5.11929 4.1193 4 5.50001 4L19.2857 4C19.4852 4 19.585 4 19.6651 4.02806C19.8088 4.07831 19.9217 4.19124 19.9719 4.33486C20 4.41505 20 4.51479 20 4.71429V4.71429C20 5.91124 20 6.50972 19.8317 6.99084C19.5301 7.85258 18.8526 8.53011 17.9908 8.83165C17.5097 9 16.9112 9 15.7143 9L15 9M3.00001 6.5V6.5C3.00001 7.88071 4.11929 9 5.50001 9L19 9C19.9428 9 20.4142 9 20.7071 9.29289C21 9.58579 21 10.0572 21 11L21 13M3.00001 6.5L3.00001 17C3.00001 18.8856 3.00001 19.8284 3.58579 20.4142C4.17158 21 5.11439 21 7.00001 21L19 21C19.9428 21 20.4142 21 20.7071 20.7071C21 20.4142 21 19.9428 21 19L21 17M21 17H17C16.0572 17 15.5858 17 15.2929 16.7071C15 16.4142 15 15.9428 15 15V15C15 14.0572 15 13.5858 15.2929 13.2929C15.5858 13 16.0572 13 17 13H21M21 17L21 13' stroke='%23878787' stroke-width='1.5'/%3E%3C/svg%3E%0A") !important;
+}
+
+.fa-briefcase:before {
+     content:  url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='User_box'%3E%3Cpath id='Ellipse 45' d='M17.7956 20.7059C17.4537 19.6427 16.7004 18.7033 15.6526 18.0332C14.6047 17.3632 13.3208 17 12 17C10.6792 17 9.3953 17.3632 8.34743 18.0332C7.29957 18.7033 6.5463 19.6427 6.20445 20.7059' stroke='%23878787' stroke-width='1.5'/%3E%3Ccircle id='Ellipse 46' cx='12' cy='10' r='3' stroke='%23878787' stroke-width='1.5' stroke-linecap='round'/%3E%3Crect id='User Icon' x='2.75' y='2.75' width='18.5' height='18.5' rx='3.25' stroke='%23878787' stroke-width='1.5'/%3E%3C/g%3E%3C/svg%3E%0A") !important;
+}
+
+.fa-comments:before {
+     content:  url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 8.5C3 7.10218 3 6.40326 3.22836 5.85195C3.53284 5.11687 4.11687 4.53284 4.85195 4.22836C5.40326 4 6.10218 4 7.5 4H16.5C17.8978 4 18.5967 4 19.1481 4.22836C19.8831 4.53284 20.4672 5.11687 20.7716 5.85195C21 6.40326 21 7.10218 21 8.5V9.25C21 9.66421 20.6642 10 20.25 10H20C18.8954 10 18 10.8954 18 12V12C18 13.1046 18.8954 14 20 14H20.25C20.6642 14 21 14.3358 21 14.75V15.5C21 16.8978 21 17.5967 20.7716 18.1481C20.4672 18.8831 19.8831 19.4672 19.1481 19.7716C18.5967 20 17.8978 20 16.5 20H7.5C6.10218 20 5.40326 20 4.85195 19.7716C4.11687 19.4672 3.53284 18.8831 3.22836 18.1481C3 17.5967 3 16.8978 3 15.5V14.75C3 14.3358 3.33579 14 3.75 14H4C5.10457 14 6 13.1046 6 12V12C6 10.8954 5.10457 10 4 10H3.75C3.33579 10 3 9.66421 3 9.25V8.5Z' stroke='%23878787' stroke-width='1.5'/%3E%3Cpath d='M11.5568 10.6885C11.7249 10.2536 11.809 10.0361 11.9455 10.0059C11.9814 9.99802 12.0186 9.99802 12.0545 10.0059C12.191 10.0361 12.2751 10.2536 12.4432 10.6885C12.5389 10.9359 12.5867 11.0596 12.6761 11.1437C12.7012 11.1673 12.7284 11.1883 12.7574 11.2065C12.8608 11.2711 12.9899 11.2831 13.248 11.3071C13.685 11.3477 13.9035 11.368 13.9702 11.4973C13.984 11.5241 13.9934 11.5531 13.998 11.5831C14.0201 11.7279 13.8595 11.8796 13.5383 12.1829L13.449 12.2671C13.2989 12.4089 13.2238 12.4798 13.1803 12.5683C13.1543 12.6213 13.1368 12.6785 13.1286 12.7375C13.115 12.8358 13.137 12.9386 13.1809 13.1443L13.1967 13.2178C13.2755 13.5867 13.315 13.7712 13.2657 13.8618C13.2215 13.9433 13.1401 13.9954 13.0501 13.9999C12.9499 14.0048 12.8088 13.8855 12.5265 13.6468C12.3406 13.4895 12.2476 13.4109 12.1443 13.3802C12.05 13.3521 11.95 13.3521 11.8557 13.3802C11.7524 13.4109 11.6594 13.4895 11.4735 13.6468C11.1912 13.8855 11.0501 14.0048 10.9499 13.9999C10.8599 13.9954 10.7785 13.9433 10.7343 13.8618C10.685 13.7712 10.7245 13.5867 10.8033 13.2178L10.8191 13.1443C10.863 12.9386 10.885 12.8358 10.8714 12.7375C10.8632 12.6785 10.8457 12.6213 10.8197 12.5683C10.7762 12.4798 10.7011 12.4089 10.551 12.2671L10.4617 12.1829C10.1405 11.8796 9.97989 11.7279 10.002 11.5831C10.0066 11.5531 10.016 11.5241 10.0298 11.4973C10.0965 11.368 10.315 11.3477 10.752 11.3071C11.0101 11.2831 11.1392 11.2711 11.2426 11.2065C11.2716 11.1883 11.2988 11.1673 11.3239 11.1437C11.4133 11.0596 11.4611 10.9359 11.5568 10.6885Z' fill='%23878787' stroke='%23878787' stroke-width='1.5'/%3E%3C/svg%3E%0A") !important;
+}
+
+.fa-chart-simple:before {
+    content:   url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="17.5" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="%237d7d7d" d="M160 80c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 352c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-352zM0 272c0-26.5 21.5-48 48-48l32 0c26.5 0 48 21.5 48 48l0 160c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48L0 272zM368 96l32 0c26.5 0 48 21.5 48 48l0 288c0 26.5-21.5 48-48 48l-32 0c-26.5 0-48-21.5-48-48l0-288c0-26.5 21.5-48 48-48z"/></svg>') !important;
+}
+
+/*
+.btn-open-account:before {
+     content:  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M7 2.91663V11.0833' stroke='%23171717' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M2.91675 7H11.0834' stroke='%23171717' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+}
+*/
+
+.account-history-table td,.account-history-table th,.market-watch-live-table td,.market-watch-live-table th {
+     border-top: 0px solid #EEEEEE !important;
+    border-right: 0px solid #EEEEEE !important; 
+    border: 0px !important; 
+    color: white !important;
+}
+
+.account-history-table th, .market-watch th
+{
+    color: #878787 !important;
+}
+
+.logo-default {
+    margin: 21px 0px 0px 2px !important;
+}
+
+ 
+.internal-transfer-options select {
+    border-radius: 8px;
+    border: 1px solid var(--clr-stroke);
+    background: var(--clr-bg);
+}
+
+.internal-transfer-options .from-info li {
+    background: white !important;
+    color: var(--clr-text) !important;
+}
+
+.titleDivider {
+    border-bottom: 1px solid #E9E9E9;
+}
+
+.page-sidebar-fixed .page-sidebar {
+    top: 70px;
+}
+
+.page-content-wrapper .page-content {
+    padding-top: 50px !important;
+}
+
+.page-header.navbar .top-menu .navbar-nav { 
+    padding-top: 7px !important;
+}
+
+.dropdown-quick-sidebar-toggler {
+    padding-top: 4px !important;
+}
+
+.page-header.navbar .top-menu .navbar-nav>li.dropdown .dropdown-toggle:hover, .page-header.navbar .top-menu .navbar-nav>li.dropdown.open .dropdown-toggle {
+    background-color: var(--clr-text) !important;
+}
+
+.pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover {
+    color: #777;
+    cursor: not-allowed;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    color: #ffffff;
+    background-color: transparent;
+    border: 1px solid transparent;
+}
+
+.account-manager-buttons a {
+    padding: 9px 0px 0px 3px !important;
+    width: 44px;
+    height: 44px;
+    margin: 0px 10px 0px 0px;
+    float: right;
+}
+
+
+#account-history-table_wrapper  a {
+    color: var(--clr-white);
+}
+
+.account-manager {
+    border-top: 1px solid #E5E5E5;
+}
+
+a.btn-whatsapp {
+    margin-right: 23px !important;
+}
+
+.profile-sidebar-portlet {
+    padding: 15px !important;
+}
+
+#accordion .panel-default>.panel-heading {
+    border: 0px solid #E5E5E5 !important;
+    background: #F5F5F5 !important;
+    padding: 10px 20px 8px 20px;
+ }
+
+ #accordion .panel {
+    border-radius: 7px !important;
+    background: white;
+    border: 1px solid #E5E5E5;
+ }
+
+ .glyphicon-collapse-up:before {
+    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23' fill='none'%3E%3Cpath d='M6 14L12 8L18 14' stroke='%23171717' stroke-width='1.91826' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+ .glyphicon-collapse-down:before {
+    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='%23171717' stroke-width='1.91826' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.profile-label { 
+  
+    width: 300px;
+    padding-top: 6px;   
+    color: #171717;
+    font-family: "ClashDisplay-Medium", Arial;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%;
+}
+
+.panel span.current-val {
+    color: #878787;
+    font-family: Geist-Regular, Arial;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 140%;
+}
+
+.profile-label i {
+    margin-top: -4px;
+}
+
+button#addemail {
+    float: left;
+    width: 400px;
+}
+
+.portlet.wallet-totals-view { 
+    background: #1C1C1C;
+    margin-bottom: 10px !important;
+}
+
+.portlet.wallet-totals-view .caption-subject {
+    color: white;
+    text-align: center;
+    font-family: "ClashDisplay-Medium", Arial;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%; 
+}
+
+.portlet.wallet-totals-view hr {
+    border: 0px;
+    margin: 7px;
+}
+
+.portlet.wallet-totals-view .currency-tile-primary { 
+    background: #CAFD5D;
+    color:  #171717 !important;
+    font-family: "ClashDisplay-Medium", Arial;
+    font-size: 15.429px;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0.309px;
+    margin-bottom: 15px;
+
+}
+
+.portlet.wallet-totals-view .text-center strong {
+    color: white;
+    font-family: "ClashDisplay-Medium", Arial;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%;
+
+}
+
+.member-wallet-tabs .tabs-left.nav-tabs>li,.member-wallet-tabs .tabs-right.nav-tabs>li {
+    background: #F5F5F5;
+    border-radius: 8px !important;
+    padding: 3px 0px;
+}
+
+.member-wallet-tabs .tabs-left.nav-tabs>li>a,.member-wallet-tabs .tabs-right.nav-tabs>li>a {
+    color:  #171717;
+    font-family: Geist-Regular, Arial;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 22px; /* 137.5% */
+    letter-spacing: 0.16px;
+    text-transform: capitalize;
+}
+
+.member-wallet-tabs .tabs-left.nav-tabs>li>a,.member-wallet-tabs .tabs-right.nav-tabs>li>a {
+    margin-right: 0;
+    margin-bottom: 0px;
+}
+
+.member-wallet-tabs .tabs-left.nav-tabs>li.active>a,.member-wallet-tabs .tabs-left.nav-tabs>li.active>a:hover>li.active>a:focus {
+  
+  
+   border-radius: 8px !important;
+    border-color: #CAFD5D;
+    background: #CAFD5D;
+}
+
+.member-wallet-tabs .tabs-left.nav-tabs>li.active, .member-wallet-tabs .tabs-right.nav-tabs>li.active,.member-wallet-tabs .tabs-left.nav-tabs>li:hover {
+    background: #CAFD5D;
+    border-radius: 8px !important;
+    padding: 3px 0px;
+}
+
+.member-wallet-tabs .nav>li>a:hover {
+    background: #CAFD5D;
+    border-color: #CAFD5D;
+    border-radius: 8PX ! IMPORTANT;
+}
+
+
+.member_trading i {
+    margin-top: 3px !important;
+    color: #171717;
+}
+
+.member_trading .panel-title {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%;
+}
+
+table.dataTable tr > td:first-child { border-top-left-radius: 12px !important; }
+table.dataTable tr > td:last-child { border-top-right-radius: 12px !important; }
+table.dataTable tr > td:first-child { border-bottom-left-radius: 12px !important; }
+table.dataTable tr > td:last-child { border-bottom-right-radius: 12px !important; }
+
+table.dataTable thead td, table.dataTable thead th {
+    border-bottom: 0px;
+    outline: 0 !important;
+}
+
+.table>tbody>tr>td, .table>tfoot>tr>td, .table>thead>tr>td {
+    border-top: 0px;
+    border-right: 0px;
+    color: var(--clr-text);
+    font-family: Geist-Regular, Arial;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    vertical-align: baseline;
+}
+
+table.dataTable.table-stripped tr.even td {
+    background-color: var(--clr-bg);
+}
+
+table.table.table-bordered,
+.table-bordered>tbody>tr>td,
+.table-bordered>tbody>tr>th,
+.table-bordered>tfoot>tr>td,
+.table-bordered>tfoot>tr>th,
+.table-bordered>thead>tr>td,
+.table-bordered>thead>tr>th {
+    border: none;
+}
+
+table.dataTable td.sorting_1,
+table.dataTable td.sorting_2,
+table.dataTable td.sorting_3,
+table.dataTable th.sorting_1,
+table.dataTable th.sorting_2,
+table.dataTable th.sorting_3 {
+    background-color: inherit !important;
+}
+
+table.dataTable thead th {
+    color: var(--clr-slate-gray);
+    font-family: Geist-Regular, Arial;
+    font-weight: normal;
+    font-size: 12px;
+}
+
+div.dataTables_wrapper div.dataTables_info {
+    color: var(--clr-slate-gray);
+    font-size: 13px;
+}
+
+table.dataTable td > button.btn.btn-default {
+    border: none;
+    background-color: transparent;
+    color: var(--clr-text);
+}
+
+table.dataTable td > button.btn.btn-default > i {
+    color: var(--clr-text);
+    font-size: 16px;
+}
+
+label {
+    color: #787878;
+    font-family: Geist-Regular, Arial;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+ .pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus,.pagination>.disabled>span:hover {
+    color: #777;
+    cursor: not-allowed;
+    background-color: transparent;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px !important;
+    border-color: transparent;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px !important;
+}
+
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    color: #878787;
+   
+}
+
+.nav-pills-hd-tickets li a {
+    text-transform: none !important;
+  display: flex;
+  padding: 8px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px !important;
+  
+  background: #F5F5F5 !important;
+  color: #171717 !important;
+  font-family: "Geist-Medium", Arial;
+  font-size: 16px;
+  line-height: 140%; /* 22.4px */
+  font-weight: 500;
+  margin: auto;
+}
+
+.nav-pills-hd-tickets li.active a { 
+     background: #171717 !important;
+  color: var(--clr-white) !important;
+}
+
+.nav-pills>li {
+    margin-right: 10px;
+}
+
+.btn-add-ticket {
+    background:#FF4912 !important;
+    padding: 8px 16px;
+    color: white;
+    color: #FFF;
+    font-family: Geist-Medium, Arial;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%;
+}
+
+.page-header .page-bar.balance {
+    margin: 0;
+    background: none;
+    border: none;
+    float: right;
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.syntellicore-login hr {
+    border-top: 0;
+    margin-bottom: 0;
+}
+
+.dashboard-trading-accounts-table .warningMessage {
+    background-color: inherit;
+    color: var(--clr-white);
+    border: none;
+    padding: 20px 5px;
+}
+
+.dashboard-trading-accounts .pagination > li > a {
+    margin-left: 3px;
+    background-color: #555;
+    border-color: #333;
+}
+
+.page-header.navbar .top-menu .navbar-nav>li.lang-select .dropdown-toggle {
+    padding-top: 20px;
+}
+
+.nav-pills > li > a {
+    background-color: var(--clr-bg);
+    color: var(--clr-text);
+    border-radius: 12px !important;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active >a:hover {
+    background-color: var(--clr-text);
+    color: var(--clr-white);
+}
+
+#exportBtn {
+    border-radius: 12px !important;
+    background-color: var(--clr-text);
+    color: var(--clr-white);
+    border: none;
+}
+
+.password-info {
+    background-color: var(--clr-bg);
+    border-radius: 12px !important;
+}
+
+.input-group > .input-group-addon {
+    border-color: var(--clr-stroke);
+}
+
+.input-group > .form-control + .input-group-addon,
+.input-group > .input-group-addon:first-child {
+    border-radius: 12px 0 0 12px !important;
+}
+
+.input-group > .input-group-addon + .form-control,
+.input-group > .input-group-addon:last-child {
+    border-radius: 0 12px 12px 0 !important;
+}
+
+.datepicker table td, .datepicker table th, .datetimepicker table td, .datetimepicker table th {
+    font-family: "Geist-Regular", Arial !important;
+}
+
+table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before, table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
+    background-color: var(--clr-secondary);
+    color: var(--clr-text);
+}
+
+.page-sidebar .page-sidebar-menu>li.open>a,
+.page-sidebar .page-sidebar-menu>li:hover>a,
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu>li.open>a,
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu>li:hover>a {
+    color: var(--clr-white);
+    background-color: var(--clr-gunmetal);
+}
+
+.page-sidebar .page-sidebar-menu .sub-menu>li.active>a,
+.page-sidebar .page-sidebar-menu .sub-menu>li.open>a,
+.page-sidebar .page-sidebar-menu .sub-menu>li:hover>a,
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu>li.active>a,
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu>li.open>a,
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu>li:hover>a {
+    color: var(--clr-white);
+    background-color: var(--clr-gunmetal) !important;
+    border-radius: 12px !important;
+}
+
+.page-sidebar .page-sidebar-menu .sub-menu>li>a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu .sub-menu>li>a {
+    color: var(--clr-dove-gray);
+}
+
+.input-group .form-control:first-child, .input-group-addon:first-child, .input-group-btn:first-child>.btn, .input-group-btn:first-child>.btn-group>.btn, .input-group-btn:first-child>.dropdown-toggle, .input-group-btn:last-child>.btn-group:not(:last-child)>.btn, .input-group-btn:last-child>.btn:not(:last-child):not(.dropdown-toggle) {
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+.account-manager-content span {
+    font-size: 15px !important;
+    padding-top: 10px;
+    color: var(--clr-bg);
+    text-align: center;
+}
+
+div.dashboard-trading-accounts-table {
+    background-color: var(--clr-text);
+    margin: 15px 0;
+    padding: 0 10px !important;
+    border-radius: 12px !important;
+
+    table#account-history-table > tbody > tr:nth-of-type(odd) {
+        background-color: var(--clr-text);
+    }
+
+    .pagination>li>a, .pagination>li>span {
+        background-color: var(--clr-gunmetal);
+        border-width: 0 !important;
+    }
+
+    .pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover {
+        background-color: var(--clr-charcoal-black);
+    }
+}
+
+#addBankAccountModal .modal-dialog {
+    margin: 10px auto; /* reduce top margin for mobile */
+}
+
+#addBankAccountModal .modal-content {
+    max-height: 100vh; /* keep modal inside viewport */
+    display: flex;
+    flex-direction: column;
+}
+
+#addBankAccountModal .modal-body {
+    overflow-y: auto;
+    max-height: 90vh; /* allow scrolling inside body */
+}
+
+#addBankAccountModal .modal-header,
+#addBankAccountModal  .modal-footer {
+    flex-shrink: 0;
+}
+
+@media only screen and (max-width: 1199px) {
+    .network-result .tree-body.dragscroll { overflow: auto!important;-webkit-overflow-scrolling: touch!important;}
+}

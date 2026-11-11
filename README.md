@@ -141,6 +141,15 @@ docker compose up app --build # build and run the app
 docker compose up dev --build # run the app in dev mode on port 3001
 ```
 
+## Deploying (Supabase + Cloudflare)
+
+The repo ships with an OpenNext/Cloudflare Workers config, a Supabase migration
+for the portal store, and manual CI/CD workflows. Nothing deploys automatically.
+
+See **[docs/deployment.md](docs/deployment.md)** for the full walkthrough
+(GitHub secrets, `supabase db push`, `wrangler r2 bucket create`, Worker
+secrets, and the post-deploy smoke test).
+
 ## Agent Support
 
 The project keeps one portable Agent Skill at `.agents/skills/clone-website/`. Codex, Cursor, and OpenCode read it directly. Claude Code uses the small command bridge at `.claude/commands/clone-website.md` so `/clone-website` and its arguments continue to work without exposing a duplicate skill to the other agents.

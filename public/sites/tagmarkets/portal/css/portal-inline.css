@@ -1,0 +1,78 @@
+/*
+ * Inline <style> blocks that the portal pages ship inside their own markup.
+ * Kept separate from the generated portal.css so the cascade order matches the
+ * source (linked sheets first, inline blocks after).
+ */
+
+.if_body {
+  padding-top: 0px;
+}
+
+.if_noborder {
+  border: 1px solid transparent;
+}
+
+.navbar-brand {
+  height: auto;
+}
+
+#options button {
+  background: #fff;
+  color: #000;
+  border-color: transparent;
+}
+
+.input-group-addon:last-child {
+  border-left: 0;
+  border-radius: 8px !important;
+}
+
+.external-registration-container a.fb_register {
+  background: url(/gateway/social/facebook/images/fb.png) no-repeat 20px center;
+}
+
+.external-registration-container a {
+  display: block;
+  padding: 10px;
+  text-align: center;
+  margin: 0 10px;
+  color: #000;
+  border: 1px solid #ccc;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.payment-methods {
+  padding: 40px 0px 10px;
+  color: white;
+}
+
+.dotted {
+  border-top: 1px dashed #435a64;
+}
+
+.payment-methods ul {
+  list-style-type: none;
+}
+
+.payment-methods ul li {
+  display: inline;
+  padding: 0px 10px;
+  margin-bottom: 10px;
+}
+
+.payment-methods ul li img {
+  padding: 0px 0px 10px;
+}
+
+.navbar-account-email {
+  display: block;
+  padding: 15px 10px;
+  color: #fff;
+  font-size: 13px;
+  line-height: 20px;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

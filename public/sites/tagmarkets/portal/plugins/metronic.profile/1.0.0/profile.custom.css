@@ -1,0 +1,46 @@
+.profile-sidebar-portlet {
+	padding:25px 0px 0px 0px !important;
+}
+
+.profile-usertitle-login {
+	color:#000000;
+	font-size:14px;
+}
+
+.profile-usertitle-name {
+    color: #000000;
+    font-size: 18px;
+    text-transform: capitalize !important;
+    font-weight: 800;
+    margin-bottom: 0px;
+    margin-top:10px;
+}
+
+.profile-contact {
+	background: #DDDDDD;
+	text-align: center;
+	padding:10px 0px;
+}
+
+.profile-usertitle {
+	margin-bottom: 20px;
+}
+
+.profile-contact-title {
+	font-size: 16px;
+	color:#000000;
+}
+
+.profile-label {
+	font-size:15px;	
+	color:#0000000;
+	width:300px;
+	padding-top:6px;
+	font-weight: bold;
+}
+
+.panel-default>.panel-heading {
+	padding:0px 15px;
+	border:1px solid #DDDDDD!important;
+	background: #DDDDDD;
+}

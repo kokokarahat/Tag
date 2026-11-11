@@ -1,0 +1,293 @@
+/* Deposit modal — visual parity with the legacy portal amount / PSP screens. */
+
+.tm-deposit-modal .modal-content {
+  border-radius: 4px;
+  border: 0;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.tm-deposit-modal .modal-header {
+  border-bottom: 1px solid #e5e5e5;
+  padding: 15px;
+}
+
+.tm-deposit-modal .modal-body {
+  padding: 15px 20px 20px;
+}
+
+.tm-deposit-modal .modal-dialog {
+  width: 500px;
+}
+
+/* The live close control is a plain icon, not a bordered button. */
+.tm-deposit-modal .modal-header .btn-modal-close {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #333;
+  padding: 0;
+}
+
+.tm-deposit-modal .modal-dialog.modal-lg {
+  width: 900px;
+  max-width: calc(100vw - 40px);
+}
+
+@media (min-width: 1600px) {
+  .tm-deposit-modal .modal-dialog.modal-smc {
+    width: 500px;
+  }
+}
+
+.tm-deposit-modal .choose_currency-lang,
+.tm-deposit-modal .select_amount label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.tm-deposit-modal .btn-amount-select {
+  height: 32px;
+  min-height: 32px;
+  font-size: 14px;
+  padding: 6px 12px;
+}
+
+.tm-deposit-modal .btn-other-amount {
+  height: 32px;
+  min-height: 32px;
+  font-size: 14px;
+  padding: 6px 12px;
+}
+
+.tm-deposit-modal .btn-selected {
+  background: #fff !important;
+  color: #b20000 !important;
+  border: 1px solid #b20000 !important;
+}
+
+.tm-deposit-modal .intro_msg {
+  color: #777;
+  font-size: 13px;
+  margin: 8px 0 4px;
+}
+
+.tm-deposit-modal .psp-list {
+  display: block;
+  padding: 0 10px 15px;
+  margin: 0;
+}
+
+.tm-deposit-modal .psp-list .deposit-option {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  margin: 0 8px 8px 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.tm-deposit-modal .psp-list .deposit-option.selected {
+  background: #fff;
+  border-color: #b20000;
+}
+
+.tm-deposit-modal .psp-button,
+.tm-deposit-modal .coin-button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+}
+
+.tm-deposit-modal .psp-img {
+  border: 1px solid #eaeaea;
+  background-color: #fff;
+  cursor: pointer;
+  max-width: 120px;
+}
+
+.tm-deposit-modal .psp-content {
+  min-height: 420px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 40px;
+}
+
+.tm-deposit-modal .psp-welcome-screen {
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 0 30px;
+}
+
+/* Crypto step ------------------------------------------------------------- */
+
+.tm-deposit-modal .coin-option {
+  height: auto !important;
+  justify-content: flex-start !important;
+  padding: 8px 10px;
+}
+
+.tm-deposit-modal .coin-option.selected {
+  background: #fff;
+  border-color: #b20000;
+}
+
+.tm-deposit-modal .coin-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+}
+
+.tm-deposit-modal .coin-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 34px;
+}
+
+.tm-deposit-modal .coin-icon.small {
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  flex-basis: 22px;
+}
+
+.tm-deposit-modal .coin-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.tm-deposit-modal .coin-name {
+  font-weight: 600;
+  color: #222;
+  font-size: 15px;
+}
+
+.tm-deposit-modal .coin-amount {
+  color: #777;
+  font-size: 12px;
+}
+
+.tm-deposit-modal .coin-networks {
+  color: #b20000;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.tm-deposit-modal .tm-crypto-panel {
+  width: 100%;
+  padding: 10px 20px 0;
+}
+
+.tm-deposit-modal .tm-crypto-info {
+  background: #f7f7f7;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 22px;
+}
+
+.tm-deposit-modal .tm-crypto-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 991px) {
+  .tm-deposit-modal .tm-crypto-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tm-deposit-modal .tm-crypto-label {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.tm-deposit-modal .tm-crypto-label span {
+  color: #b20000;
+  font-weight: 700;
+}
+
+.tm-deposit-modal .tm-crypto-networks {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #777;
+}
+
+.tm-deposit-modal .tm-crypto-qr {
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 12px;
+  background: #fff;
+}
+
+.tm-deposit-modal .tm-qr-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.tm-deposit-modal .tm-qr-tabs span {
+  flex: 1;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 12px;
+  padding: 5px 0;
+  color: #777;
+  cursor: default;
+}
+
+.tm-deposit-modal .tm-qr-tabs span.active {
+  border-color: #b20000;
+  color: #b20000;
+  font-weight: 600;
+}
+
+.tm-deposit-modal .tm-qr-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  background: #fff;
+}
+
+.tm-deposit-modal .tm-qr-box img {
+  width: 220px;
+  height: 220px;
+  display: block;
+}
+
+.tm-deposit-modal .tm-qr-placeholder {
+  width: 220px;
+  height: 220px;
+  border: 1px dashed #ccc;
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  letter-spacing: 0.2em;
+}

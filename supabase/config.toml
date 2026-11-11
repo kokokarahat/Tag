@@ -1,0 +1,38 @@
+# Supabase CLI config for this project.
+#
+# Only the minimum needed for `npx supabase link` + `npx supabase db push`.
+# There is no local stack here on purpose: migrations are applied to the hosted
+# project. Local development uses the JSON fallback in `.data/` unless
+# SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are set in `.env.local`.
+
+project_id = "tagmarkets-clone"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 17
+
+[db.migrations]
+enabled = true
+schema_paths = ["supabase/migrations"]
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000"]
+jwt_expiry = 3600
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = false

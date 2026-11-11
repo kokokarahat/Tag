@@ -1,0 +1,13 @@
+@font-face {
+  font-family: "Font Awesome 5 Pro";
+  font-style: normal;
+  font-weight: 300;
+  font-display: auto;
+  src: url("../webfonts/fa-light-300.woff2") format("woff2"),
+    url("../webfonts/fa-light-300.woff") format("woff");
+}
+
+.fa-light {
+  font-family: "Font Awesome 5 Pro";
+  font-weight: 300;
+}

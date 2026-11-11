@@ -1,0 +1,254 @@
+# Tag Markets — clone research & verification
+
+Source surfaces:
+
+| Surface | Source URL | Local route |
+| --- | --- | --- |
+| Marketing homepage | `https://www.tagmarkets.com/` | `/` |
+| Marketing inner pages | `https://www.tagmarkets.com/<slug>/` | `/<slug>` (16 pages, table below) |
+| Portal login | `https://portal.tagmarkets.com/login` | `/login` |
+| Portal registration | `https://portal.tagmarkets.com/live_signup` | `/live_signup` |
+| Demo admin console | — | `/admin` (password gate) |
+
+## Routes
+
+Marketing inner pages cloned 1:1 from the live HTML:
+
+| Route | Source slug | Captured content |
+| --- | --- | --- |
+| `/account-types` | `account-types` | `src/content/tagmarkets/pages/account-types.ts` |
+| `/amplify` | `amplify` | `…/amplify.ts` |
+| `/deposit-methods` | `deposit-methods` | `…/deposit-methods.ts` |
+| `/copy-trade` | `copy-trade` | `…/copy-trade.ts` |
+| `/partners` | `partners` | `…/partners.ts` |
+| `/education` | `education` | `…/education.ts` |
+| `/contact` | `contact` | `…/contact.ts` |
+| `/risk-warning` | `risk-warning` | `…/risk-warning.ts` |
+| `/privacy` | `privacy` | `…/privacy.ts` |
+| `/client-agreement` | `client-agreement` | `…/client-agreement.ts` |
+| `/complaints` | `complaints` | `…/complaints.ts` |
+| `/conflict-of-interest` | `conflict-of-interest` | `…/conflict-of-interest.ts` |
+| `/kyc-aml` | `kyc-aml` | `…/kyc-aml.ts` |
+| `/refund-and-withdrawal-policy` | `refund-and-withdrawal-policy` | `…/refund-and-withdrawal-policy.ts` |
+| `/regulatory-request` | `regulatory-request` | `…/regulatory-request.ts` |
+| `/insurance` | `insurance` | `…/insurance.ts` |
+
+## Architecture
+
+Four independent root layouts, so the marketing site, the inner pages and the
+portal never share a CSS reset:
+
+```
+src/app/
+  (marketing)/layout.tsx   -> globals.css + tagmarkets.css        (Tailwind base)
+  (marketing)/page.tsx     -> homepage (hand-ported JSX)
+  (pages)/layout.tsx       -> inner-shared.css + tagmarkets.css   (no Tailwind preflight)
+  (pages)/<slug>/page.tsx  -> InnerPage + captured <main> HTML
+  (portal)/layout.tsx      -> links /public portal CSS            (Bootstrap base)
+  (portal)/login/page.tsx
+  (portal)/live_signup/page.tsx
+  (portal)/dashboard/page.tsx
+  (admin)/admin/page.tsx   -> password-gated console
+  (admin)/admin/login/page.tsx
+```
+
+There is no `src/app/layout.tsx`; every route group owns its `<html>`/`<body>`.
+
+### Homepage
+
+The homepage is hand-ported JSX. `src/app/tagmarkets.css` is the source sheet
+with three renames to avoid collisions with the other layouts:
+
+| Source | Clone |
+| --- | --- |
+| `.container` | `.tm-container` |
+| `.button` | `.tm-button` |
+| `footer` | `.site-footer` |
+
+### Inner pages
+
+The captured `<main>` markup is rendered verbatim with
+`dangerouslySetInnerHTML` (no JSX conversion), so text, classes and structure
+stay byte-identical to the source. Header, mobile nav, footer, WhatsApp float
+and jurisdiction bar are shared React components.
+
+The `(pages)` layout deliberately **does not** import `globals.css`: Tailwind
+preflight resets `h1` margins and italics, which the captured legal pages rely
+on. It loads `inner-shared.css` first, then `tagmarkets.css`.
+
+Page CSS is split because the per-page chunks contain bare element selectors
+(`h1`, `h2`, …) that would leak across pages:
+
+```
+node scripts/build-page-content.mjs   # source/pages/*.html -> src/content/tagmarkets/pages/*.ts
+node scripts/build-inner-css.mjs      # source CSS          -> inner-shared.css + inner-<page>.css
+```
+
+Both scripts read the captured ground truth in
+`docs/research/tagmarkets/source/`. Do not hand-edit the generated files.
+
+Interactions from the source's inline vanilla scripts are re-implemented in
+`src/components/sites/tagmarkets/InnerInteractions.tsx` against the same data
+attributes:
+
+- account-type tabs (`[data-account-tab]`, spec values swap)
+- copy-trade tabs (`[data-copy-tab]`, image swap)
+- deposit-method tabs (`[data-deposit-tab]`, region rows toggle)
+- insurance certificate modal (`#openCert` / `#pdfModal` / `#pdfFrame`)
+- contact office switcher (cards + thumbnail gallery)
+- scroll reveals (`.reveal-on-scroll`)
+
+## Assets
+
+```
+public/
+  assets/                       inner-page images, contact photos, insurance PDF
+  sites/tagmarkets/
+    home/                       homepage images + hero video
+    portal/css/                 generated portal.css + portal-inline.css
+    portal/fonts/               glyphicons (Bootstrap 3)
+    portal/webfonts/            Font Awesome 5 Pro/Regular/Brands/Light
+    portal/flags/               language switcher SVGs
+    portal/logo_small.png       portal navbar logo
+    logo.svg, flags/            marketing header + locale switcher
+```
+
+Source blocks `curl` for HTML and binaries (Cloudflare), so assets were pulled
+with an in-app-browser `fetch` and POSTed to a localhost sink
+(`POST http://localhost:8899/?name=…&b64=1&dir=…`).
+
+Portal CSS is generated by `node scripts/build-portal-css.mjs`. It concatenates
+the source sheets in load order
+(`bootstrap → font-awesome → pwstrength → jquery-confirm → style → responsive →
+dwf → custom → base → theme-style → signup`) and rewrites the font URLs to
+`/sites/tagmarkets/portal/{fonts,webfonts}/`. `src/app/(portal)/layout.tsx`
+links the output with `<link rel="stylesheet">` instead of importing it:
+Next/Lightning CSS re-serialises numeric values (`line-height: 1.42857143` →
+`1.42857`), which shifts the Bootstrap pixel grid by 1–3 px.
+
+## Ground truth used for calibration
+
+The live site cannot be automated (Cloudflare challenge), so the reference is a
+local offline render of the captured DOM + original stylesheets:
+
+```
+docs/research/tagmarkets/source/
+  index.html, pages/*.html   marketing captures (served on :8900)
+  portal-offline.html        login reference
+  signup-offline.html        registration reference
+  portal-offline/*.css       original stylesheets, unmodified
+  fonts/, webfonts/          so icon fonts resolve in the reference
+```
+
+The reference server on `:8900` exposes the inner pages through the symlinks
+`source/_astro → astro` and `source/assets → ../../../../public/assets`, and
+serves `pages/<slug>.html` as `/pages/<slug>.html`.
+
+## Verification method
+
+Two Playwright harnesses compare the reference against the clone by reading
+`getBoundingClientRect()` + the computed style of every meaningful node, then
+byte-compare full-page screenshots:
+
+- homepage: geometry + pixel comparison at 1440 and 390
+- inner pages: every element under `<main>` at 1440 and 390
+- login: 47 selectors (nav, card, form, buttons, footer)
+- registration: 43 selectors (nav, card, form fields, agreements, submit)
+
+Results:
+
+| Surface | 1440 | 390 |
+| --- | --- | --- |
+| Homepage | match | match |
+| 16 inner pages | 0 mismatches | 0 mismatches |
+| Login | 0.012 % pixel diff | 0.003 % |
+| Registration | 0.008 % pixel diff | 0.000 % |
+
+Residual pixels are sub-pixel text antialiasing, the portal language flag
+(the offline reference has no `/images/en.svg`, the clone loads the real flag),
+and the Next.js dev indicator (absent from `next build` output).
+
+The only systematic inner-page difference is the contact e-mail: Cloudflare
+rewrites `help@tagmarkets.com` to `[email protected]` in the saved HTML. The
+clone shows the decoded address, so on narrow screens the contact card wraps
+36 px lower. Patching the reference text to the decoded address makes the
+mobile comparison report **0/63 mismatches**, confirming it is a capture
+artifact, not a layout bug.
+
+## Portal demo capture + admin console
+
+The clone has no real backend, so the two portal forms record submissions and
+`/admin` renders them.
+
+```
+src/lib/portal-store.ts            append/list/clear, serialised writes
+src/lib/supabase.ts                Supabase adapter (used when env vars exist)
+src/types/portal.ts                shared event shapes
+src/app/api/portal/login/route.ts  POST -> record + set session cookie
+src/app/api/portal/signup/route.ts POST -> record + set session cookie
+src/app/api/portal/logout/route.ts POST -> clear cookie
+src/app/api/admin/submissions/route.ts  GET list / DELETE clear (auth required)
+src/app/api/admin/auth/route.ts    POST password -> sets signed cookie
+src/lib/admin-auth.ts              password check + cookie signing
+src/app/(admin)/admin/page.tsx     protected console
+src/app/(admin)/admin/login/page.tsx
+src/components/admin/AdminDashboard.tsx
+```
+
+Behaviour:
+
+- Every login attempt records e-mail, password, remember flag, IP, user agent
+  and timestamp.
+- After a successful login the browser is sent to
+  `https://portal.tagmarkets.com/login` (the real portal).
+- Every completed registration is recorded with the same metadata.
+- `/admin` shows logins and registrations with password reveal/copy, search,
+  live refresh every 4 s, CSV export and a clear button.
+- Admin password: `tag2026!@#` (override with `ADMIN_PASSWORD`). The session is
+  a sha256-signed cookie; `/admin` and `/api/admin/submissions` redirect or
+  return 401 without it.
+- IP resolution prefers `cf-connecting-ip` → `x-real-ip` → `x-forwarded-for`.
+  Locally it shows `::1`.
+- Storage: Supabase when `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` are set,
+  otherwise `.data/portal-events.json` (git-ignored, unencrypted).
+
+> Demo only. Passwords are stored in plain text; never expose the console
+> publicly without changing the gate and adding transport security.
+
+## Deployment infrastructure (prepared, not deployed)
+
+Nothing has been pushed or deployed. The repo contains:
+
+```
+supabase/migrations/20261108000000_portal_events.sql   table + RLS, no public policies
+wrangler.jsonc                                         Cloudflare Worker + assets + R2
+open-next.config.ts                                    OpenNext Cloudflare adapter
+.github/workflows/ci.yml                               lint + typecheck + build
+.github/workflows/deploy-cloudflare.yml                manual dispatch only
+.env.example, .dev.vars.example                        env templates
+docs/deployment.md                                     Hebrew step-by-step
+```
+
+Scripts: `npm run cf:build`, `cf:preview`, `cf:deploy`, `cf:typegen`.
+
+## Deliberately not replicated
+
+- Intercom chat launcher (third-party widget, no visual footprint at rest).
+- Restricted-region geo dialog (depends on the visitor's IP).
+- WikiLicense badge JS (rebuilt statically from the rendered result).
+- The portal's real auth endpoint — submissions go to the demo store instead.
+  Validation messages are present but hidden, exactly like the source's initial
+  state; browser-native validation still runs.
+- Marketing locale routes (`/es/`, `/de/`, …) and portal locale routes
+  (`/es/login`, …). Their links point at the live sites instead of 404-ing.
+- `/ForgotPassword` and the portal legal PDFs link to the live portal.
+
+## Commands
+
+```
+npm run dev        # dev server on :3000
+npm run build      # production build
+npm run lint       # ESLint
+npm run typecheck  # tsc --noEmit
+npm run check      # lint + typecheck + build
+```

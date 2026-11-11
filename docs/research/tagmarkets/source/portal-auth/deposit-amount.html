@@ -1,0 +1,503 @@
+
+<script src="https://cdn.jsdelivr.net/npm/decimal.js@10.3.1/decimal.min.js"></script>
+
+<script type="text/javascript" src="/plugins/numeral.js/2.0.6/min/numeral.min.js"></script> 
+
+			<style>
+				.btn-selected {
+					background: #FFF;
+					color: #B20000;
+					border: 1px solid #B20000;
+				}
+
+		        input[type="number"]::-webkit-inner-spin-button,
+		        input[type="number"]::-webkit-outer-spin-button {
+		            -webkit-appearance: none;
+		            margin: 0;
+		        }
+		        
+		        input[type="number"] {
+		            -moz-appearance: textfield;
+		        }
+				/* gap between currency radio buttons */
+		        .currency-radio-container {
+		        	display: flex;
+		        	gap: 1.2rem; 
+		        	}
+
+		        .currency-radio-container input[type="radio"] {
+		        	margin-right: 4px;
+		        	cursor: pointer;
+		        }
+				.currency-radio-container label {
+					font-size: 16px;
+				}
+			</style>
+			
+			<script type="text/javascript">
+				var decimal_no = 2;
+				var currency_settings_number_format = 'application';
+				var depositbuddy_show_other_amount_default = 0;							
+
+				var checkScrWidth = function () {
+					// fix for other amount button in smaller screens
+				    var w = window.innerWidth;
+				    if (w < 1600) {
+				    	$('.btn-other-amount').html('Other')
+				    }
+				    else {
+				    	$('.btn-other-amount').html('Other amount')
+				    }
+				}
+
+				var getPSPSelectionView = function(params) {
+					var amount = typeof params.amount !== 'undefined' ? params.amount : 0;
+					var currency_id = typeof params.currency_id !== 'undefined' ? params.currency_id : 0;
+					var currency = typeof params.currency !== 'undefined' ? params.currency : '';
+					var currency_sign = typeof params.currency_sign !== 'undefined' ? params.currency_sign : 0;
+					var skip_currency_selection = typeof params.skip_currency_selection !== 'undefined' ? params.skip_currency_selection : 0;
+
+					$.ajax({
+						url: '/cfc/controller.cfc?method=getPSPSelectionView',
+						type: 'POST',
+						data: {
+							amount    	  : amount,
+							currency_id   : currency_id,
+							currency      : currency,
+							currency_sign : currency_sign,
+							skip_currency_selection : skip_currency_selection,
+							additional_data : ''
+						},
+					})
+					.done(function(result) {
+						$('.modal-deposit-view').removeClass('modal-smc');
+						$('.modal-deposit-view').addClass('modal-lg');
+						$('.deposit-view-content').html(result).fadeIn();
+					});
+				}
+
+				function renderPredefinedAmounts(predefined_amounts, decimal_len) {
+					var BTN_RESIZE_DECIMAL_LENGTH = 6;
+					var decimal_length = decimal_len ? decimal_len : 2;
+					var currency_sign = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').data('currency_sign');				
+					var $col_other_amount = $('.col-other-amount');
+
+					
+					$('.currency_sign').html(currency_sign);
+					$('.error_message_amount_selected').fadeOut();
+					$('.other_amount_data').val('');
+
+					if (depositbuddy_show_other_amount_default == 0) {
+						$('.other_amount_placeholder').fadeOut();
+					}
+					
+					if (predefined_amounts.length === 0) {
+						$('.select_amount').fadeOut();
+						$('.other_amount').fadeOut();
+						$('.amount_container').empty();
+
+						$('.deposit-view-content').LoadingOverlay('hide');
+						return;
+					}
+
+					var amount_container_content = '';
+					predefined_amounts.forEach(function(item) {
+						amount_container_content += `
+							<div class="col-xs-12 col-sm-12s ${decimal_length >= BTN_RESIZE_DECIMAL_LENGTH ? 'col-md-6 col-lg-6' : 'col-md-4 col-lg-4'}">
+								<button type="button" class="btn btn-block btn-theme-primary btn-amount-select margin-bottom-10" data-amount="${item.amount}" data-currency_sign="${item.sign}">
+									${item.sign+item.formatted_amount}
+								</button>
+							</div>
+						`;
+					});
+
+					if (decimal_length >= BTN_RESIZE_DECIMAL_LENGTH) {
+						$col_other_amount.addClass('col-md-6 col-lg-6');
+						$col_other_amount.removeClass('col-md-4 col-lg-4');
+					} else {
+						$col_other_amount.addClass('col-md-4 col-lg-4');
+						$col_other_amount.removeClass('col-md-6 col-lg-6');
+					}
+
+					$('.amount_container').html(amount_container_content);
+					$('.deposit-view-content').LoadingOverlay('hide');
+				}
+
+				$(document).ready(function() {
+
+					
+
+					$('.deposit-view-content').on('change', '.deposit-currency-select,.deposit-currency-radio', function() {
+						var currency 		= $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').val();
+						var currency_id 	= $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').data('currency_id');
+
+						$('.deposit-view-content').LoadingOverlay('show', {
+							background  : 'rgba(255, 255, 255, 0.8)',
+							image		: '',
+							fontawesome : 'fal fa-spinner fa-spin',
+							fontawesomeResizeFactor: 0.4
+						});
+
+						$.ajax({
+							url: '/cfc/controller.cfc?method=getPredefinedAmountsJSON',
+							type: 'POST',
+							data: {
+								currency_name: currency,
+								currency_id: currency_id,
+								type: 'DEPOSIT',
+								transaction_method: 'WIRE'
+							}
+						}).done(function(response) {
+							var predefinedAmounts = JSON.parse(response);
+
+							$.ajax({
+								url: '/cfc/controller.cfc?method=getCurrencySetting',
+								type: 'POST',
+								data: {
+									currency,
+									setting_name: 'DECIMAL_LENGTH'
+								}
+							}).done(function(response) {
+								var decimal_length = parseInt(JSON.parse(response).DECIMAL_LENGTH);
+
+								renderPredefinedAmounts(predefinedAmounts, decimal_length);
+							}).fail(function() {
+								console.log('Error fetching currency decimal length');
+
+								renderPredefinedAmounts(predefinedAmounts);
+							});
+						}).fail(function() {
+							console.log('Error fetching predefined amounts');
+						})
+					});
+
+					$('.deposit-view-content').off('click', '.btn-amount-select').on('click', '.btn-amount-select', function() {					
+						var selected_amount = $(this).attr('data-amount');					
+						var currency 		= $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').val();
+						var currency_id 	= $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').data('currency_id');
+						var currency_sign = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').attr('data-currency_sign');
+
+						var min_deposit = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').attr('data-min_deposit');
+						var min_deposit_formatted = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').attr('data-min_deposit_formatted');
+						var max_deposit = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').attr('data-max_deposit');
+						var max_deposit_formatted = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').attr('data-max_deposit_formatted');
+						$('.amount_container_hidden').html('<input type="hidden" name="amount_selected_hidden" id="amount_selected_hidden" value="'+selected_amount+'">');
+
+						// remove any errors when selecting other amount
+						$('.other_amount_placeholder').hide();
+						$('.input-other-amount').closest('.input-group').removeClass('has-error');
+						$('.input-other-amount').closest('.input-group').parent().find('.error_message_deposit_error_other').hide();
+
+						// remove comma from amount
+						selected_amount = selected_amount.replace(/,/g,'');
+						selected_amount = number.SCAmountFormat({amount: selected_amount, currency: currency});
+
+						finrules.checkShowHideRulesJSON({
+							 publish : 1
+							,transaction_type : 'DEPOSIT'
+							,transaction_method : 'CREDITCARD'
+							,currency : currency
+							,deny_tx : 1
+							,amount : selected_amount
+							,onSuccess : function () {														
+								if (parseFloat(min_deposit) > 0 && (parseFloat(selected_amount) < parseFloat(min_deposit))){
+									$('.error_message_deposit_error').html('The minimum deposit amount for this currency is: ' + currency_sign + min_deposit_formatted);
+									$('.error_message_deposit_error').fadeIn();
+									return;
+								}
+
+								if (parseFloat(max_deposit) > 0 && (parseFloat(selected_amount) > parseFloat(max_deposit))) {
+									$('.error_message_deposit_error').html('The maximum deposit amount for this currency is: ' + currency_sign + max_deposit_formatted);
+									$('.error_message_deposit_error').fadeIn();
+									return;
+								}
+
+								getPSPSelectionView({
+									amount : selected_amount,
+									currency_id : currency_id
+								});
+							}
+							,onFail : function () {							
+							}
+						});
+					});
+
+					var dropdown_length = $('.deposit-currency-select').children('option').length;
+
+					if(dropdown_length == 1){
+						$('.deposit-currency-select').addClass('hidden');
+						$('.choose_currency-lang').addClass('hidden');					
+					}
+
+					// 1536 
+					if ($('.deposit-currency-radio:checked').length > 0) { //1536 
+						$('.deposit-currency-radio:checked').trigger('change'); //1536 
+					} else {//1536 
+						$('.deposit-currency-select').trigger('change'); //not 1536 
+					}//1536 
+
+					$('.other_amount').on('click', function() {
+						$('.error_message_deposit_error').hide();
+						$('.error_message_deposit_error_other').hide();
+						$('.input-other-amount').closest('.input-group').removeClass('has-error');
+						$('.input-other-amount').val('');
+						$('.other_amount_data').val('other');
+						$('.error_message_amount_selected').fadeOut();
+						$('.other_amount_placeholder').fadeIn();
+					});
+
+					if(depositbuddy_show_other_amount_default == 1){
+						$('.other_amount').trigger('click');
+						$('.other_amount').addClass('hidden');
+					}
+
+					$('.btn-deposit-next').on('click', function(){
+						var current_amount = $('.input-other-amount').val();
+						if (current_amount == "") {
+							$('.error_message_amount_selected').fadeIn();
+						}
+
+						var selected_amount = $('.input-other-amount').val().replace(/\,/g,'');
+						var currency 	    = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').val();
+						var currency_id = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').attr('data-currency_id');
+						var currency_sign = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').attr('data-currency_sign');
+						var min_deposit = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').attr('data-min_deposit');
+						var min_deposit_formatted = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').attr('data-min_deposit_formatted');
+						var max_deposit = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').attr('data-max_deposit');
+						var max_deposit_formatted = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').attr('data-max_deposit_formatted');
+						
+						min_deposit = number.SCAmountFormat({amount: min_deposit, currency: currency});
+						max_deposit = number.SCAmountFormat({amount: max_deposit, currency: currency});
+													
+						$('.amount_container_hidden').html('<input type="hidden" name="amount_selected_hidden" id="amount_selected_hidden" value="'+selected_amount+'">');
+
+						$('.input-other-amount').closest('.input-group').removeClass('has-error');
+						$('.input-other-amount').closest('.input-group').parent().find('.error_message_amount_entered').fadeOut();
+						$('.error_message_deposit_error').hide();
+
+						if (selected_amount == "") {
+							$('.input-other-amount').closest('.input-group').addClass('has-error');
+							$('.input-other-amount').closest('.input-group').parent().find('.error_message_amount_entered').fadeIn();
+							return;
+						}	
+
+						// remove comma from amount
+						selected_amount = selected_amount.replace(/,/g,'');
+						selected_amount = number.SCAmountFormat({amount: selected_amount, currency: currency});
+											
+						finrules.checkShowHideRulesJSON({
+							publish : 1
+							,transaction_type : 'DEPOSIT'
+							,transaction_method : 'CREDITCARD'
+							,deny_tx : 1
+							,amount : selected_amount
+							,currency : currency
+							,onSuccess : function () {							
+								if (parseFloat(min_deposit) > 0 && (parseFloat(selected_amount) < parseFloat(min_deposit))){								
+									$('.error_message_deposit_error').html('The minimum deposit amount for this currency is: ' + currency_sign + min_deposit_formatted);
+									$('.error_message_deposit_error').fadeIn();
+									return;
+								}
+
+								if (parseFloat(max_deposit) > 0 && (parseFloat(selected_amount) > parseFloat(max_deposit))) {								
+									$('.error_message_deposit_error').html('The maximum deposit amount for this currency is: ' + currency_sign + max_deposit_formatted);
+									$('.error_message_deposit_error').fadeIn();
+									return;
+								}
+
+								getPSPSelectionView({
+									amount : selected_amount,								
+									currency : currency,
+									currency_id : currency_id,
+									currency_sign : currency_sign
+								});
+							}
+							,onFail : function () {
+
+							}
+						});				
+					});
+
+					checkScrWidth();
+
+				    $( window ).resize(function(){
+				    	checkScrWidth();
+				    });
+
+				    $('.make-deposit-title').html('Make a Deposit');
+
+					$('#input_other_amount').on('keyup', function() {
+						$(this).val(number.validate($(this).val()));
+
+						$(this).parent().removeClass('has-error');
+						$(this).html('');
+					});
+
+					$('#input_other_amount').on('blur', function() {
+						var $amount = $(this);
+						var amount = parseFloat($amount.val() || 0);
+						var currency = $('input[name="deposit-currency-select"]:checked, .deposit-currency-select :selected').val();
+
+						if (amount > 0 && currency !== '') {
+							var formatted_amount = number.SCAmountFormat({ amount, currency });
+
+							$amount.val(formatted_amount);
+							return;
+						}
+
+						$amount.val('');
+					});
+
+					
+				});
+			</script>
+			
+			<div class="row ">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 margin-bottom-20 ">
+						<label class="choose_currency-lang">Choose your Currency</label>
+						
+						<select class="form-control deposit-currency-select" name="deposit-currency-select" id="deposit-currency-select">
+								
+									
+
+									<option 
+										value="USD" 
+										data-allow_decimal="0"
+										data-currency_id="1"
+										data-min_deposit="0.00"
+										data-min_deposit_formatted=" 0.00"
+										data-max_deposit="0.00"
+										data-max_deposit_formatted=" 0.00"
+										data-currency_sign="$"
+										selected
+									>
+										USD
+									</option>
+								
+									
+
+									<option 
+										value="EUR" 
+										data-allow_decimal="0"
+										data-currency_id="2"
+										data-min_deposit="50.00"
+										data-min_deposit_formatted=" 50.00"
+										data-max_deposit="0.00"
+										data-max_deposit_formatted=" 0.00"
+										data-currency_sign="€"
+										
+									>
+										EUR
+									</option>
+								
+									
+
+									<option 
+										value="AUD" 
+										data-allow_decimal="0"
+										data-currency_id="8"
+										data-min_deposit="0.00"
+										data-min_deposit_formatted=" 0.00"
+										data-max_deposit="0.00"
+										data-max_deposit_formatted=" 0.00"
+										data-currency_sign="$"
+										
+									>
+										AUD
+									</option>
+								
+									
+
+									<option 
+										value="CAD" 
+										data-allow_decimal="0"
+										data-currency_id="13"
+										data-min_deposit="0.00"
+										data-min_deposit_formatted=" 0.00"
+										data-max_deposit="0.00"
+										data-max_deposit_formatted=" 0.00"
+										data-currency_sign="$"
+										
+									>
+										CAD
+									</option>
+								
+
+							</select>
+						
+					</div>
+					
+					<div class="select_amount">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<label>
+								Select Amount
+							</label>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 margin-bottom-10">
+						<div class="row">
+							<div class="amount_container_hidden">
+							</div>
+							<div class="amount_container">
+							</div>
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 margin-bottom-10 other_amount col-other-amount">
+								<button type="button" class="btn btn-block btn-theme-primary btn-other-amount" data-amount="other">
+								</button>
+							</div>
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 margin-bottom-10">
+								<div class="alert alert-danger error_amount_specified help-block" style="display: none;">
+									No amounts are specified for the current currency. Please contact your administrator.
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 margin-bottom-10">
+								<div class="alert alert-danger error_message_amount_selected help-block" style="display: none;">
+									You have not selected any amount
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 margin-bottom-10">
+								<div class="alert alert-danger error_message_deposit_error help-block" style="display: none;">
+								</div>
+							</div>
+						</div>
+					</div>
+					
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 margin-bottom-20">
+							<div class="row">
+								<div class="other_amount_placeholder" style="display: none;">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<label>Other amount</label>
+										<div class="input-group">
+											<span class="input-group-addon currency_sign"></span>
+											<input type="text" class="form-control input-other-amount" id="input_other_amount" value="">
+										</div>
+										<div class="alert alert-danger help-block error_message_amount_entered" style="display: none;">
+											Please enter the desired amount
+										</div>
+										<div class="alert alert-danger help-block error_message_deposit_error_other" style="display: none;">
+										</div>
+									</div>
+									<input type="hidden" class="other_amount_data">
+								</div>
+							</div>
+						</div>
+					
+						
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 intro_msg">
+								Choose your currency and select the desired amount to proceed
+							</div>					
+						
+				</div>
+				
+					
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="row">
+							<hr>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-12 col-md-offset-7 col-md-5 col-lg-offset-7 col-lg-5">
+						<button type="button" class="btn btn-theme-primary btn-block btn-deposit-next">Next &gt;</button>
+					</div>
+				
+			</div>
+		<script>window.__CF$cv$params={r:'a575ce9588ea0dd4',t:'MTc5NDE1Mzc5OA==',u:'01a1bbd715d473caae0842915a232a93',ut:'VJxcbX9Z78Dm8ELs6ioP733rIdMkN1lBPBnBB2oa29k-1794153798-1.2.1.1-wVg.hy4AZI3A2oNXsALMrJl3Z.irhQnoHIYvECCBZb0oIEBs_jQpa20a6C.ALv._Tj2vY6aE1NIW1lva0CXNPp8EX1WILYV4bzudgj.s_DQ',i:60};(function(){if(!document.body)return;var l=window.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/precursor/main.js?ray=a575ce9588ea0dd4',s=document.createElement('script');s.src=o?new URL(u,o).href:u;document.head.appendChild(s);})();</script>

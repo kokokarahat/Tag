@@ -1,0 +1,10 @@
+#pwd-container .progress-bar {
+	background:url('/images/bg-pwstrength.jpg') center left repeat-x !important;
+}
+
+#pwd-container .progress {
+	background:url('/images/bg-pwstrength_ghost.jpg') center left repeat-x !important;
+	width:113px;
+	height:20px;
+	
+}
