@@ -38,7 +38,7 @@ git push -u origin main
 
 | Secret | תיאור |
 | --- | --- |
-| `CLOUDFLARE_API_TOKEN` | טוקן עם הרשאות Workers Scripts:Edit ו-Workers R2 Storage:Edit |
+| `CLOUDFLARE_API_TOKEN` | טוקן עם הרשאות Workers Scripts:Edit (אין צורך ב-R2) |
 | `CLOUDFLARE_ACCOUNT_ID` | מזהה החשבון מ-Cloudflare Dashboard |
 
 ---
@@ -85,9 +85,6 @@ git push -u origin main
 # התחברות חד-פעמית
 npx wrangler login
 
-# הפעם היחידה: צור את דלי ה-R2 ל-cache
-npx wrangler r2 bucket create tagmarkets-clone-opennext-cache
-
 # סודות ריצה על ה-Worker (לא נכנסים ל-Git)
 npx wrangler secret put SUPABASE_URL
 npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
@@ -113,8 +110,11 @@ npm run cf:deploy
 - Worker בשם `tagmarkets-clone`
 - `nodejs_compat` (נדרש ל-Next ול-Supabase)
 - Assets מ-`.open-next/assets`
-- דלי R2 ל-incremental cache
 - Images binding לאופטימיזציית תמונות
+
+> אין דלי R2: האפליקציה לא משתמשת ב-ISR/`revalidate`, ולכן ה-cache הוא קריאה
+> בלבד מה-assets (`staticAssetsIncrementalCache`). אם תוסיף revalidation בהמשך,
+> תחזיר את `r2IncrementalCache` וגם את ה-binding `NEXT_INC_CACHE_R2_BUCKET`.
 
 לדומיין מותאם: **Cloudflare Dashboard → Workers & Pages → tagmarkets-clone →
 Settings → Domains & Routes → Add custom domain**.

@@ -1,14 +1,15 @@
 import { defineCloudflareConfig } from "@opennextjs/cloudflare";
-import r2IncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/r2-incremental-cache";
+import staticAssetsIncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/static-assets-incremental-cache";
 
 /**
  * Cloudflare adapter for the clone.
  *
- * `r2IncrementalCache` keeps ISR/route-cache output in the R2 bucket declared in
- * `wrangler.jsonc`. Create that bucket once with:
- *
- *   npx wrangler r2 bucket create tagmarkets-clone-opennext-cache
+ * The app has no ISR or `revalidate`, so the read-only static-assets cache is
+ * enough: prerendered pages are served straight from the Worker's assets and
+ * there is no R2 bucket to create or pay for. If revalidation is added later,
+ * switch back to `r2IncrementalCache` and re-add the bucket binding in
+ * `wrangler.jsonc`.
  */
 export default defineCloudflareConfig({
-  incrementalCache: r2IncrementalCache,
+  incrementalCache: staticAssetsIncrementalCache,
 });

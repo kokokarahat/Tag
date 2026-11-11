@@ -15,12 +15,6 @@
       "service": "tagmarkets-clone"
     }
   ],
-  "r2_buckets": [
-    {
-      "binding": "NEXT_INC_CACHE_R2_BUCKET",
-      "bucket_name": "tagmarkets-clone-opennext-cache"
-    }
-  ],
   "images": {
     "binding": "IMAGES"
   },
