@@ -1,9 +1,17 @@
 import type { Metadata } from "next";
+import { SHARED_METADATA } from "@/lib/site-meta";
 
 export const metadata: Metadata = {
+  ...SHARED_METADATA,
   title: "Tag Markets",
   description:
     "Log in or register for your Tag Markets account. Trading Forex & CFDs is Risky.",
+  openGraph: {
+    ...SHARED_METADATA.openGraph,
+    title: "Tag Markets",
+    description:
+      "Log in or register for your Tag Markets account. Trading Forex & CFDs is Risky.",
+  },
 };
 
 export default function PortalLayout({

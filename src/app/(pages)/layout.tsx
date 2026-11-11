@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { SHARED_METADATA } from "@/lib/site-meta";
 
 import "../inner-shared.css";
 import "../tagmarkets.css";
 
 export const metadata: Metadata = {
+  ...SHARED_METADATA,
   title: "Tag Markets",
 };
 
