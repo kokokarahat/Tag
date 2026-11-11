@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LoginPage } from "@/components/sites/tagmarkets/portal/LoginPage";
+import { VisitTracker } from "@/components/sites/tagmarkets/VisitTracker";
 
 export const metadata: Metadata = {
   title: "Tag Markets",
@@ -7,5 +8,10 @@ export const metadata: Metadata = {
 };
 
 export default function Login() {
-  return <LoginPage />;
+  return (
+    <>
+      <VisitTracker page="login" />
+      <LoginPage />
+    </>
+  );
 }

@@ -12,10 +12,12 @@ import { Footer } from "@/components/sites/tagmarkets/Footer";
 import { WhatsAppFloat } from "@/components/sites/tagmarkets/WhatsAppFloat";
 import { ScrollReveal } from "@/components/sites/tagmarkets/ScrollReveal";
 import { JurisdictionHeight } from "@/components/sites/tagmarkets/JurisdictionHeight";
+import { VisitTracker } from "@/components/sites/tagmarkets/VisitTracker";
 
 export default function Home() {
   return (
     <div className="tm-site">
+      <VisitTracker page="home" />
       <div className="site-header">
         <RiskBar />
         <Header />

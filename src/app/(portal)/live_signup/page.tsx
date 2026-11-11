@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SignupPage } from "@/components/sites/tagmarkets/portal/SignupPage";
+import { VisitTracker } from "@/components/sites/tagmarkets/VisitTracker";
 
 export const metadata: Metadata = {
   title: "Register | Tag Markets",
@@ -7,5 +8,10 @@ export const metadata: Metadata = {
 };
 
 export default function LiveSignup() {
-  return <SignupPage />;
+  return (
+    <>
+      <VisitTracker page="signup" />
+      <SignupPage />
+    </>
+  );
 }
