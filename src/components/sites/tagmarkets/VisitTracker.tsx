@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 
 const VISITOR_KEY = "tm_visitor_id";
+const HEARTBEAT_MS = 25_000;
+const MAX_TRACKING_MS = 2 * 60 * 60 * 1000;
 
 function readVisitorId(): string {
   try {
@@ -16,35 +18,65 @@ function readVisitorId(): string {
   }
 }
 
+function send(url: string, body: string) {
+  return fetch(url, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body,
+    keepalive: true,
+  }).catch(() => undefined);
+}
+
 /**
- * Fire-and-forget page-view beacon used by the admin traffic stats.
+ * Fire-and-forget page-view beacon + live presence heartbeat.
  *
- * Only one hit per page per browser session, and failures are swallowed so a
- * blocked request can never affect the portal itself.
+ * One view per page per browser session, then a heartbeat every 25s so the
+ * admin console can show who is on the site right now. Heartbeats stop after
+ * two hours to avoid a forgotten tab pinging forever, and every failure is
+ * swallowed so tracking can never affect the portal itself.
  */
 export function VisitTracker({ page }: { page: string }) {
   useEffect(() => {
-    const storageKey = `tm_visit_${page}`;
+    const visitorId = readVisitorId();
+    const startedAt = Date.now();
+    const payload = () =>
+      JSON.stringify({
+        path: window.location.pathname,
+        referredFrom: document.referrer,
+        visitorId,
+      });
 
+    let counted = false;
     try {
-      if (window.sessionStorage.getItem(storageKey)) return;
-      window.sessionStorage.setItem(storageKey, "1");
+      counted = window.sessionStorage.getItem(`tm_visit_${page}`) === "1";
+      window.sessionStorage.setItem(`tm_visit_${page}`, "1");
     } catch {
-      /* storage blocked: still count the hit once per mount */
+      /* storage blocked: still count once per mount */
     }
 
-    const body = JSON.stringify({
-      path: window.location.pathname,
-      referredFrom: document.referrer,
-      visitorId: readVisitorId(),
-    });
+    if (!counted) {
+      void send("/api/portal/visit", payload());
+    }
 
-    void fetch("/api/portal/visit", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body,
-      keepalive: true,
-    }).catch(() => undefined);
+    if (!visitorId) return;
+
+    const beat = () => {
+      if (Date.now() - startedAt > MAX_TRACKING_MS) return;
+      if (document.visibilityState === "hidden") return;
+      void send("/api/portal/heartbeat", payload());
+    };
+
+    beat();
+    const timer = window.setInterval(beat, HEARTBEAT_MS);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") beat();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, [page]);
 
   return null;

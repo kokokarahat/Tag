@@ -3,9 +3,16 @@ import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { getSupabaseAdmin } from "@/lib/supabase";
-import type { LoginEvent, PortalEvent, PortalVisit, SignupEvent, VisitPage } from "@/types/portal";
+import type {
+  LoginEvent,
+  PortalEvent,
+  PortalPresence,
+  PortalVisit,
+  SignupEvent,
+  VisitPage,
+} from "@/types/portal";
 
-export type { LoginEvent, PortalEvent, PortalVisit, SignupEvent } from "@/types/portal";
+export type { LoginEvent, PortalEvent, PortalPresence, PortalVisit, SignupEvent } from "@/types/portal";
 
 /**
  * Demo credential capture for the cloned portal.
@@ -23,8 +30,10 @@ export type { LoginEvent, PortalEvent, PortalVisit, SignupEvent } from "@/types/
 const DATA_DIR = path.join(process.cwd(), ".data");
 const DATA_FILE = path.join(DATA_DIR, "portal-events.json");
 const VISITS_FILE = path.join(DATA_DIR, "portal-visits.json");
+const PRESENCE_FILE = path.join(DATA_DIR, "portal-presence.json");
 const TABLE = "portal_events";
 const VISITS_TABLE = "portal_visits";
+const PRESENCE_TABLE = "portal_presence";
 
 /** Serialises local read-modify-write cycles so concurrent requests cannot drop rows. */
 let queue: Promise<unknown> = Promise.resolve();
@@ -416,4 +425,121 @@ export async function listVisits(): Promise<PortalVisit[]> {
 
   const visits = await readVisitsLocal();
   return visits.sort((a, b) => b.at.localeCompare(a.at)).slice(0, 5000);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Live presence                                                              */
+/* -------------------------------------------------------------------------- */
+
+type PresenceRow = {
+  visitor_id: string;
+  last_seen: string;
+  path: string;
+  page: VisitPage;
+  referrer: string | null;
+  country: string | null;
+  city: string | null;
+  region: string | null;
+  timezone: string | null;
+  ip: string | null;
+  user_agent: string | null;
+};
+
+function rowToPresence(row: PresenceRow): PortalPresence {
+  return {
+    visitorId: row.visitor_id,
+    lastSeen: row.last_seen,
+    path: row.path,
+    page: row.page,
+    referrer: row.referrer ?? "",
+    country: row.country ?? "",
+    city: row.city ?? "",
+    region: row.region ?? "",
+    timezone: row.timezone ?? "",
+    ip: row.ip ?? "",
+    userAgent: row.user_agent ?? "",
+  };
+}
+
+async function readPresenceLocal(): Promise<PortalPresence[]> {
+  try {
+    const raw = await readFile(PRESENCE_FILE, "utf8");
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as PortalPresence[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+async function writePresenceLocal(rows: PortalPresence[]): Promise<void> {
+  await mkdir(DATA_DIR, { recursive: true });
+  const tempFile = `${PRESENCE_FILE}.${process.pid}.tmp`;
+  await writeFile(tempFile, `${JSON.stringify(rows, null, 2)}\n`, "utf8");
+  await rename(tempFile, PRESENCE_FILE);
+}
+
+/** Heartbeat: upserts the visitor's current page and last-seen timestamp. */
+export async function touchPresence(
+  request: Request,
+  input: { visitorId: string; path: string; page: VisitPage; referrer: string },
+): Promise<PortalPresence> {
+  const metaInfo = visitMeta(request);
+  const presence: PortalPresence = {
+    visitorId: input.visitorId.slice(0, 64),
+    lastSeen: new Date().toISOString(),
+    path: input.path.slice(0, 512),
+    page: input.page,
+    referrer: input.referrer.slice(0, 512),
+    ...metaInfo,
+  };
+
+  const supabase = getSupabaseAdmin();
+  if (supabase) {
+    const row: PresenceRow = {
+      visitor_id: presence.visitorId,
+      last_seen: presence.lastSeen,
+      path: presence.path,
+      page: presence.page,
+      referrer: presence.referrer || null,
+      country: presence.country || null,
+      city: presence.city || null,
+      region: presence.region || null,
+      timezone: presence.timezone || null,
+      ip: presence.ip || null,
+      user_agent: presence.userAgent || null,
+    };
+    const { error } = await supabase
+      .from(PRESENCE_TABLE)
+      .upsert(row, { onConflict: "visitor_id" });
+    if (error) throw new Error(`Supabase presence upsert failed: ${error.message}`);
+    return presence;
+  }
+
+  await withLock(async () => {
+    const rows = await readPresenceLocal();
+    const next = rows.filter((row) => row.visitorId !== presence.visitorId);
+    next.push(presence);
+    await writePresenceLocal(next);
+  });
+  return presence;
+}
+
+/** Presence rows seen since `sinceIso`, newest first. */
+export async function listPresence(sinceIso: string): Promise<PortalPresence[]> {
+  const supabase = getSupabaseAdmin();
+  if (supabase) {
+    const { data, error } = await supabase
+      .from(PRESENCE_TABLE)
+      .select("*")
+      .gte("last_seen", sinceIso)
+      .order("last_seen", { ascending: false })
+      .limit(200);
+    if (error) throw new Error(`Supabase presence select failed: ${error.message}`);
+    return ((data ?? []) as PresenceRow[]).map(rowToPresence);
+  }
+
+  const rows = await readPresenceLocal();
+  return rows
+    .filter((row) => row.lastSeen >= sinceIso)
+    .sort((a, b) => b.lastSeen.localeCompare(a.lastSeen));
 }

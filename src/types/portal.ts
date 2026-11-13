@@ -85,8 +85,23 @@ export type PortalStats = {
     logins: number;
     signups: number;
   };
+  live: PortalPresence[];
   byCountry: CountryStat[];
   byPage: PageStat[];
   daily: DailyStat[];
   recentVisits: PortalVisit[];
+};
+
+export type PortalPresence = {
+  visitorId: string;
+  lastSeen: string;
+  path: string;
+  page: VisitPage;
+  referrer: string;
+  country: string;
+  city: string;
+  region: string;
+  timezone: string;
+  ip: string;
+  userAgent: string;
 };

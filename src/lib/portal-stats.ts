@@ -1,4 +1,4 @@
-import { listEvents, listVisits } from "@/lib/portal-store";
+import { listEvents, listPresence, listVisits } from "@/lib/portal-store";
 import type {
   CountryStat,
   DailyStat,
@@ -38,9 +38,14 @@ function eventCountry(event: PortalEvent): string {
  * for a demo portal and keeps the Supabase queries to two simple selects.
  */
 export async function getPortalStats(): Promise<PortalStats> {
-  const [events, visits] = await Promise.all([listEvents(), listVisits()]);
-
   const now = Date.now();
+  const onlineSince = new Date(now - 90_000).toISOString();
+  const [events, visits, live] = await Promise.all([
+    listEvents(),
+    listVisits(),
+    listPresence(onlineSince),
+  ]);
+
   const todayStart = startOfUtcDay(now);
   const weekStart = todayStart - 6 * DAY_MS;
 
@@ -123,6 +128,7 @@ export async function getPortalStats(): Promise<PortalStats> {
   return {
     generatedAt: new Date().toISOString(),
     totals,
+    live,
     byCountry,
     byPage,
     daily: [...daily.values()],
